@@ -2,20 +2,21 @@ import React from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { Link } from 'react-router-dom'
-import axios from 'axios'
 import { Toast } from '../Notify'
 import 'react-toastify/dist/ReactToastify.css';
+import axios from '../api/axios'
 //import SignUp from '../user/SignUp.css'
 
 function SignUp({ navigate }) {
 
+const REGISTER_URL = '/signup'
 
     const validationArray = Yup.object().shape({
         name: Yup.string().min(6).required('This is Required'),
         email: Yup.string().email("Invalid Email Format").required('Email is Required'),
-        password: Yup.string().min(6).required('Password is required'),
-        confirm_password: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match').required('This is required'),
-        terms: Yup.bool().required('Accept Terms is required').oneOf([true],)
+        password: Yup.string().min(6).required('Password is Required'),
+        confirm_password: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match').required('This is Required'),
+        terms: Yup.bool().required('Accept Terms is Required').oneOf([true],)
     })
 
     const formik = useFormik({
@@ -36,15 +37,23 @@ function SignUp({ navigate }) {
 
     const request = async (values) => {
         try {
-            const res = await axios.post('/signin', values)
+            const res = await axios.post(REGISTER_URL , JSON.stringify({values}) , 
+              {
+                headers : { 'content-type' : 'application/json'}
+                //withCredentials : true
+              }
+              )
             console.log(values);
+            console.log("This is Resssss",res);
             if (res) {
                 Toast.fire("Register successfully");
                 return navigate('/SignIn')
             }
         } catch (error) {
             Toast.fire('Email already exist!');
-            console.log(error);
+            console.log(values);
+            //console.log("This is Resssss",res);
+            console.log("This is Erorrrrr",error);
         }
     }
 
@@ -76,10 +85,10 @@ function SignUp({ navigate }) {
                                         <div className="row">
                                             <div className="form-outline mb-4">
                                                 <div className="form-outline">
-                                                    <label className="form-label" for="form3Example1">Name</label>
+                                                    <label className="form-label" for="form3Example2">Name</label>
                                                     <input
                                                         type="text"
-                                                        id="form3Example1"
+                                                        id="form3Example2"
                                                         className="form-control"
                                                         name='name'
                                                         placeholder='Enter your name'
@@ -140,30 +149,35 @@ function SignUp({ navigate }) {
                                             </div>
                                         </div>
 
-                                        {/* <div className="form-check d-flex justify-content-center mb-4">
+                                        <div className="form-check d-flex justify-content-center mb-4">
+                                        <div>
                                             <input
-                                                className="form-check-input me-2"
-                                                // type="checkbox"
+                                                //className="form-check-input me-2"
+                                               type="checkbox"
                                                 id="form2Example33"
                                                 onChange={formik.handleChange}
                                                 checked={formik.values.terms}
                                                 value={formik.values.terms}
                                                 name="terms" />
-                                            <span className="form-check-sign">
+                                            {/* <span className="form-check-sign">
                                                     <span className="check"></span>
-                                                </span>
+                                                </span> */}
                                             <label className="form-check-label" for="form2Example33">
-                                                I have read and agree to the Terms
-                                            </label>
+                                                I Agree to the Terms and Conditions
+                                            </label>&nbsp;
                                             {formik.touched.terms && formik.errors.terms ? (
-                                                <span style={{ color: 'red' }} >This is Required</span>) : null}
-                                        </div> */}
+                                                <div style={{ color: 'red' }} >
+                                                  This is Required
+                                                  </div>) 
+                                                  : null}
+                                                </div>
+                                        </div>
 
-                                        <div className='form-group'>
+                                        {/* <div className='form-group'>
                                             <label htmlFor='terms'>Accept Terms</label>
                                             <input
                                                 className='form-control'
-                                                // type='Checkbox'
+                                                type='Checkbox'
                                                 name='terms'
                                                 checked={formik.values.terms}
                                                 onChange={formik.handleChange}
@@ -178,14 +192,14 @@ function SignUp({ navigate }) {
                                             <div className='text-danger'>
                                                 {formik.errors.terms ? formik.errors.terms : null}
                                             </div>
-                                        </div>
+                                        </div> */}
 
                                         <button
                                             type="submit"
                                             className="btn btn-primary btn-block mb-4">
                                             Sign up
                                         </button>
-
+                                        <div style={{color : 'black'}}> <h5>Already have an account</h5><Link to='/SignIn'>Login here</Link></div>
                                         <div className="text-center">
                                             <p>or sign up with:</p>
                                             <button type="button" className="btn btn-link btn-floating mx-1">

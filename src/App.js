@@ -14,10 +14,3 @@ const App = () => {
 }
 
 export default App;
-
-
-
-
-
-
-//https://sk-test-ecommerce.herokuapp.com
