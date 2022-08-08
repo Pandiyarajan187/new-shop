@@ -1,15 +1,15 @@
 import React from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { Link } from 'react-router-dom'
+import { Link ,useNavigate } from 'react-router-dom'
 import { Toast } from '../Notify'
 import 'react-toastify/dist/ReactToastify.css';
 import axios from '../api/axios'
 //import SignUp from '../user/SignUp.css'
 
-function SignUp({ navigate }) {
+function SignUp() {
 
-const REGISTER_URL = '/signup'
+  let navigate = useNavigate()
 
     const validationArray = Yup.object().shape({
         name: Yup.string().min(6).required('This is Required'),
@@ -36,26 +36,19 @@ const REGISTER_URL = '/signup'
 
 
     const request = async (values) => {
-        try {
-            const res = await axios.post(REGISTER_URL , JSON.stringify({values}) , 
-              {
-                headers : { 'content-type' : 'application/json'}
-                //withCredentials : true
-              }
-              )
-            console.log(values);
-            console.log("This is Resssss",res);
-            if (res) {
-                Toast.fire("Register successfully");
-                return navigate('/SignIn')
-            }
-        } catch (error) {
-            Toast.fire('Email already exist!');
-            console.log(values);
-            //console.log("This is Resssss",res);
-            console.log("This is Erorrrrr",error);
+      try {
+        const res = await axios.post('/signup', values)
+        console.log(res);
+        if (res) {
+            Toast.fire({ icon: 'success',title: 'Register successfully' })
+            return navigate('/signin')
         }
+    } catch (error) {
+        Toast.fire({ icon: 'warning',title: 'Email already exist!' })
+        console.log(error);
     }
+    }
+    
 
     return (
         <div>

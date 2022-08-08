@@ -1,15 +1,15 @@
-import React from 'react';
+import React , {useContext} from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import MyRoute from './MyRoute';
 import { useNavigate } from 'react-router-dom';
+import AuthState from './context/authState'
 
 
 const App = () => {
-  let navigate = useNavigate()
   return(
-    <div className='container'>
-       <MyRoute />
-    </div>
+      <AuthState>
+         <MyRoute />
+      </AuthState>
   )
 }
 

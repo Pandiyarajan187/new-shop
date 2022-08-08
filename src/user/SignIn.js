@@ -1,16 +1,18 @@
 import React from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { Link } from 'react-router-dom'
+import { Link , useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { Toast } from '../Notify'
 import 'react-toastify/dist/ReactToastify.css';
+import { isAuthenticated } from '../utils/Auth'
+
 //import SignUp from '../user/SignUp.css'
 
-function SignIn({ navigate }) {
-
-
-    const validationArray = Yup.object().shape({
+function SignIn() {
+  
+  let navigate = useNavigate()
+  const validationArray = Yup.object().shape({
         email: Yup.string().email("Invalid Email Format").required('Email is Required'),
         password: Yup.string().min(6).required('Password is Required'),
     })
@@ -30,10 +32,11 @@ function SignIn({ navigate }) {
 
     const request = async (values) => {
         try {
-            const res = await axios.post('/search', values)
-            console.log(values);
+            const res = await axios.post('/signin', values)
+            console.log(res);
             if (res) {
-                Toast.fire("Login successfully");
+              localStorage.setItem('token', JSON.stringify(res.data.token))
+              Toast.fire({ icon: 'success',title: `Welcome back, ${res.data.user.name}`, position: 'top-end' })
                 return navigate('/')
             }
         } catch (error) {
@@ -49,8 +52,8 @@ function SignIn({ navigate }) {
                     <div className="row gx-lg-5 align-items-center mb-5" style={{ backgroundColor: '#000000' }}>
                         <div className="col-lg-6 mb-5 mb-lg-0" style={{ zIndex: "10" }}>
                             <h1 className="my-5 display-5 fw-bold ls-tight" style={{ color: "hsl(218, 81%, 95%)" }}>
-                                The best offer <br />
-                                <span style={{ color: ' hsl(218, 81%, 75%' }}>for your business</span>
+                                The best offer for<br />
+                                <span style={{ color: ' hsl(218, 81%, 75%' }}>your business</span>
                             </h1>
                             <p className="mb-4 opacity-5000" style={{ color: 'hsl(218, 81%, 85%' }}>
                                 Lorem ipsum dolor, sit amet consectetur adipisicing elit.
@@ -104,7 +107,7 @@ function SignIn({ navigate }) {
                                         <button
                                             type="submit"
                                             className="btn btn-primary btn-block mb-4">
-                                            Sign up
+                                            Sign In
                                         </button>
                                       <div style={{color : 'black'}}> <h5>Don't have an account</h5><Link to='/SignUp'>Create Account</Link></div>
                                         <div className="text-center">
