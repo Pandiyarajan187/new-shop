@@ -3,7 +3,7 @@ import { isAuthenticated } from '../utils/Auth'
 
 export const request = async( method, url, data = {}, id = false, userToken = false, queryString = '' ) => {
    const { user , token } = isAuthenticated()
-   let BASE_URL = 'https://sk-test-ecommerce.herokuapp.com'
+   let BASE_URL = 'https://sk-test-ecommerce.herokuapp.com/api'
    let headers = {}
    let urlId = ''
    if(userToken){

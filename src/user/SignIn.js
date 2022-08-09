@@ -35,7 +35,8 @@ function SignIn() {
             const res = await axios.post('/signin', values)
             console.log(res);
             if (res) {
-              localStorage.setItem('token', JSON.stringify(res.data.token))
+              localStorage.setItem('token', (res.data.token))
+              localStorage.setItem('user' , JSON.stringify(res.data.user))
               Toast.fire({ icon: 'success',title: `Welcome back, ${res.data.user.name}`, position: 'top-end' })
                 return navigate('/')
             }

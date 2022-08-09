@@ -1,1 +1,4 @@
 export const DASHBOARD_PAGE = 'DASHBOARD_PAGE';
+export const PROFILE_UPDATE = 'PROFILE_UPDATE';
+export const ADD_CATEGORY = 'ADD_CATEGORY';
+
