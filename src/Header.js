@@ -8,19 +8,14 @@ import authContext from './context/authContext'
 function Header() {
     let navigate = useNavigate()
     let location = useLocation()
-    const {user , token , userDashboard} = useContext(authContext)
+    const {user , token , userDashboard , signout} = useContext(authContext)
     // const {user} = user
 
     useEffect (()=>{
         userDashboard()
     },[])
 
-    const SignOut = () => {
-        localStorage.removeItem('token')
-        localStorage.removeItem('user')
-        Toast.fire({ icon: 'success' ,title: 'Sign out successfully.' })
-        navigate('/SignIn')
-      }
+
 
       const isActive = (location, path) => {
         if (location.pathname === path) {
@@ -31,7 +26,7 @@ function Header() {
     return (
         <div>
             <>
-            <ul className="navbar navbar-dark bg-primary">
+       <ul className="navbar navbar-dark bg-primary">
                 {/* <li className="nav-item"> */}
                 {!user ?
                 <>
@@ -40,7 +35,7 @@ function Header() {
                       <i class="material-icons">home</i> Home
                 </Link>
                 </li>
-                </> : null }
+                </> : null }     
 
                 {user && user?.role === 0  ? 
                 <>
@@ -63,7 +58,7 @@ function Header() {
               }
               {user && user?.role === 1 ?
                  <li class="nav-item">
-                 <Link to="/create/category" class="nav-link" style={isActive(location, '/create/category')}>
+                 <Link to="/admin/dashboard" class="nav-link" style={isActive(location, '/admin/dashboard')}>
                    <i class="material-icons">dashboard</i>Admin Dashboard
                  </Link>
                    {console.log("Admin Role================>",user.role)}
@@ -88,7 +83,7 @@ function Header() {
                     </Link>
                   </li> */}
                   <li class="nav-item">
-                    <Link to="" class="nav-link " onClick={ SignOut }>
+                    <Link to="" class="nav-link " onClick={ signout }>
                       Sign Out
                     </Link>
                   </li>

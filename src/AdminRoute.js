@@ -8,7 +8,7 @@
 //     ( <Navigate to={{ pathname: '/SignIn', state: { from: props.location } }}/> ) }/>
 // )
 
-// export default 
+// export default AdminRoute
 
 
 import React from 'react'

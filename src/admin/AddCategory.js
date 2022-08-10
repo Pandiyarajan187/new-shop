@@ -1,61 +1,54 @@
-import React , { useContext } from 'react'
+import React, { useContext } from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import authContext from '../context/authContext'
 
 function AddCategory() {
-  const { addCategory } = useContext(authContext)
-  const validationArray = Yup.object().shape({
-    category: Yup.string().min(6).required('Email is Required'),
-})
+    const { addCategory } = useContext(authContext)
+    const validationArray = Yup.object().shape({
+        name: Yup.string().min(6).required('Category is Required'),
+    })
 
-const formik = useFormik({
-    initialValues: {
-        category: '',
-    },
-    validationSchema: validationArray,
-    onSubmit: async (values) => {
-        console.log(values);
-        addCategory(values)
-    }
-})
-  const CategoryForm = (
-                    <form className='needs-validation' onSubmit={formik.handleSubmit} noValidate>
-                        <p className="h4 text-center py-4">Create Category</p>
-                        <div className="grey-text">
-                        <input
-                            className="mb-3"
-                            outline
-                            name="name"
-                            label="Category Name"
-                            icon="tag"
-                            group
-                            type="text"
-                            validate
-                            error="wrong"
-                            required
-                            value={formik.values.name}
-                            onChange={formik.handleChange}
-                            autoFocus
-                        >
-                               <div className='text-danger'>
-                                                {formik.touched.category ? formik.errors.category : null}
-                                            </div>
-                        </input>
-                        </div>
-                        <div className="text-center py-4 mt-3">
-                            <button color="cyan" type="submit">
-                                create
-                            </button>
-                        </div>
-                    </form>
-)
+    const formik = useFormik({
+        initialValues: {
+            name: '',
+        },
+        validationSchema: validationArray,
+        onSubmit: async (values) => {
+            // console.log(values);
+            addCategory(values)
+        }
+    })
+    const CategoryForm = (
+        <div>
+        <form className='needs-validation' onSubmit={formik.handleSubmit} noValidate>
+            <p className="h4 text-center py-4">Create Category</p>
+            <div className="grey-text">
+                <input
+                    type="text"
+                    className="form-control"
+                    name='name'
+                    onChange={formik.handleChange}
+                    value={formik.values.name}
+                />
+                <div className='text-danger'>
+                    {formik.touched.name ? formik.errors.name : null}
+                </div>
+            </div>
+            <div className="text-center py-4 mt-3">
+                <button  className="btn btn-primary" color="cyan" type="submit">
+                    create
+                </button>
+            </div>
+        </form >
+        </div>
+    )
 
-return (
-    <div>
-        { CategoryForm }
-    </div>
-)
+    return (
+        <div className='container'>
+            {CategoryForm}
+        </div>
+    )
 }
 
 export default AddCategory

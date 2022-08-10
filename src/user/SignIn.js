@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { Link , useNavigate } from 'react-router-dom'
@@ -6,12 +6,14 @@ import axios from 'axios'
 import { Toast } from '../Notify'
 import 'react-toastify/dist/ReactToastify.css';
 import { isAuthenticated } from '../utils/Auth'
+import authContext from '../context/authContext'
 
 //import SignUp from '../user/SignUp.css'
 
 function SignIn() {
   
   let navigate = useNavigate()
+  const { login } = useContext(authContext)
   const validationArray = Yup.object().shape({
         email: Yup.string().email("Invalid Email Format").required('Email is Required'),
         password: Yup.string().min(6).required('Password is Required'),
@@ -24,27 +26,27 @@ function SignIn() {
         },
         validationSchema: validationArray,
         onSubmit: async (values) => {
-            console.log(values);
-            request(values)
+            // console.log(values);
+            login(values)
         }
     })
 
 
-    const request = async (values) => {
-        try {
-            const res = await axios.post('/signin', values)
-            console.log(res);
-            if (res) {
-              localStorage.setItem('token', (res.data.token))
-              localStorage.setItem('user' , JSON.stringify(res.data.user))
-              Toast.fire({ icon: 'success',title: `Welcome back, ${res.data.user.name}`, position: 'top-end' })
-                return navigate('/')
-            }
-        } catch (error) {
-            Toast.fire('Invalid Username or Password');
-            console.log(error);
-        }
-    }
+    // const request = async (values) => {
+    //     try {
+    //         const res = await axios.post('/signin', values)
+    //         console.log(res);
+    //         if (res) {
+    //           localStorage.setItem('token', (res.data.token))
+    //           localStorage.setItem('user' , JSON.stringify(res.data.user))
+    //           Toast.fire({ icon: 'success',title: `Welcome back, ${res.data.user.name}`, position: 'top-end' })
+    //             return navigate('/')
+    //         }
+    //     } catch (error) {
+    //         Toast.fire('Invalid Username or Password');
+    //         console.log(error);
+    //     }
+    // }
 
     return (
         <div>
