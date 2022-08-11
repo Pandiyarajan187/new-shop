@@ -43,8 +43,8 @@ function AdminDashboard() {
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
             <Link  to='/addproduct' class="dropdown-item" >CREATE PRODUCT</Link>
-              {/* <a class="dropdown-item" href="#5">Update Product</a>
-              <a class="dropdown-item" href="#6">Delete Product</a> */}
+              <Link to='/all/product' class="dropdown-item" >EDIT PRODUCT</Link>
+              {/* <a class="dropdown-item" href="#6">Delete Product</a> */}
             </div>
           </li> : null}
       </ul>

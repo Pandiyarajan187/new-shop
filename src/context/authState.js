@@ -1,4 +1,5 @@
 import React , { useReducer , useEffect , useState} from "react";
+import { useFormik } from 'formik'
 import { useNavigate } from "react-router-dom";
 import { request } from "../utils/Request";
 import AuthContext from "./authContext";
@@ -14,7 +15,9 @@ import {
     PROFILE_UPDATE,
     ADD_CATEGORY,
     ADD_PRODUCT,
-    GETALL_CATEGORY
+    GETALL_CATEGORY,
+    EDIT_PRODUCT,
+    DELETE_PRODUCT
 } from "./authTypes";
 
 const AuthState = (props) => {
@@ -28,7 +31,8 @@ const AuthState = (props) => {
         id : null,
         name : null,
         values : null,
-        category : null
+        categories : [],
+        allProducts : [],
     }
 
     const [state, dispatch] = useReducer(authReducer, initialState)
@@ -53,8 +57,8 @@ const register = async (values) => {
 const login = async (values) => {
         try {
           const res = await axios.post('/signin', values)
-        //   console.log("RESPONSE",res);
-        //   console.log("VALUES",values);
+          console.log("RESPONSE",res);
+          console.log("VALUES",values);
         if (res) {
           localStorage.setItem('token', (res.data.token))
           localStorage.setItem('user' , JSON.stringify(res.data.user))
@@ -124,30 +128,32 @@ const login = async (values) => {
             const res = await request('POST', '/category/create/',  { name : values.name}, id, userToken)
             console.log("RESPONSE",res);
             console.log("VALUES",values);
-            if (res) {
+            if (res.status === 200) {
                 Toast.fire({ title: 'Category created successfully.', icon: 'success' })
                 dispatch({
                     type: ADD_CATEGORY,
                     payload: res.data,
                 })
+                navigate('/createcategory')
+            } else {
+                Toast.fire({ title: 'Category Already exists.', icon: 'error' })
             }
         } catch (error) {
             return Toast.fire({ title: 'Try Again later!', icon: 'error' })
         }
     }
-    const getAllCategory = async (user) => {
-        // const id = true
-        // const userToken = true
+    const getAllCategory = async () => {
         try {
-            const res = await request('get', '/categories/read' , {} , true , true )
+            const res = await request('get', '/categories/read' )
             if (res) {
+                console.log("CATRGORY RESPONSE" , res);
                 dispatch({
                     type: GETALL_CATEGORY,
-                    payload: {
-                        data  : res.data ? res.data : []}
+                    payload: res.data
                 })
             }
         } catch (error) {
+            console.log(error);
             return Toast.fire({ title: 'Try again later!', icon: 'error' })
         }
     }
@@ -163,17 +169,54 @@ const login = async (values) => {
             formData.set('quantity', values.quantity)
             formData.set('photo', values.photo)
             formData.set('shipping', values.shipping)
+            formData.set('photo', values.photo)
             const res = await request('post', '/product/create/', formData , id, userToken)
-            console.log(res.data);
+            console.log("PRODUCT RESPONSE", res);
+            console.log("formData from authsate" , formData);
             if (res.data) {
                 Toast.fire({ title: 'Product created successfully.', icon: 'success' })
                 dispatch({
                     type: ADD_PRODUCT,
                     payload: res.data
                 })
+            } else {
+                Toast.fire({ title: 'Failed', icon: 'error' })
             }
         } catch (error) {
+            console.log(error)
             return Toast.fire({ title: 'Try again later!', icon: 'error' })
+        }
+    }
+
+        const getAllProducts = async () => {
+            try {
+                const res = await request('get', '/products?limit=undefined', {}, false, true)
+                if (res.data) {
+                    console.log("ALL PRODUCT RESPONSE", res);
+                    dispatch({
+                        type: EDIT_PRODUCT,
+                        payload: res.data
+                    })
+                }
+            } catch (error) {
+                Toast.fire({ icon: 'error',title: 'Something went wrong' })
+                console.log(error)
+            }
+        }
+
+        const deleteProducts = async (id) => {
+        try {
+            const res = await request('delete', `/product/delete/${id}/`, {}, true, true)
+            if (res.data) {
+                getAllProducts()
+                dispatch({
+                    type: DELETE_PRODUCT,
+                    payload: res.data
+                })
+                return Toast.fire({ title: 'Deleted Successfully!', icon: 'success' })
+            }
+        } catch (error) {
+            console.log(error)
         }
     }
  return (
@@ -185,6 +228,8 @@ const login = async (values) => {
          id : state.id,
          name : state.name,
          values : state.values,
+         categories : state.categories,
+         allProducts : state.allProducts,
          register,
          login,
          signout,
@@ -192,7 +237,9 @@ const login = async (values) => {
          profileUpdate,
          addCategory,
          getAllCategory,
-         addProduct
+         addProduct,
+         getAllProducts,
+         deleteProducts
      }}>
          {props.children}
      </AuthContext.Provider>

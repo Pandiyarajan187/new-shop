@@ -5,7 +5,8 @@ import {
      PROFILE_UPDATE,
      ADD_CATEGORY,
      GETALL_CATEGORY,
-     ADD_PRODUCT
+     ADD_PRODUCT,
+     EDIT_PRODUCT
 } from "./authTypes";
 
 export default (state, action) => {
@@ -37,25 +38,24 @@ export default (state, action) => {
         }
         case ADD_CATEGORY : 
         return {
-            // ...state,
-            isAuthenticated : true,
-            token : action.payload.token,
+            ...state,
             id : action.payload.id,
-            name : action.payload.name
 
         }
         case GETALL_CATEGORY : 
         return {
             ...state,
-            isAuthenticated : true,
+            categories : action.payload
         }
         case ADD_PRODUCT : 
         return {
             ...state,
-            isAuthenticated : true,
-            // token : action.payload.token,
-            // id : action.payload.id,
             data : action.payload.data
+        }
+        case EDIT_PRODUCT : 
+        return {
+            ...state,
+            allProducts : action.payload
         }
         default : 
         return state;

@@ -1,22 +1,32 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import authContext from '../context/authContext'
 
 function AddCategory() {
-    const { getAllCategory, addProduct } = useContext(authContext)
-    const validationArray = Yup.object().shape({
-        name: Yup.string().min(6).required('Name is Required'),
-        description: Yup.string().min(10).required('Description is Required'),
-        price: Yup.string().required('Price is Required'),
-        category: Yup.string().min(6).required('category is Required'),
-        quantity: Yup.string().required('quantity is Required'),
-        shipping: Yup.string().min(6).required('shipping is Required'),
-    })
+
+    const { getAllCategory, addProduct, categories } = useContext(authContext)
     useEffect(() => {
         getAllCategory()
+        console.log("this is category", categories);
     }, [])
 
+    const [images, setImages] = useState('')
+    const validationArray = Yup.object().shape({
+        name: Yup.string().min(5).required('Name is Required'),
+        description: Yup.string().min(5).required('Description is Required'),
+        price: Yup.number().required('Price is Required'),
+        category: Yup.string().required('category is Required'),
+        quantity: Yup.number().required('quantity is Required'),
+        shipping: Yup.string().required('shipping is Required'),
+        photo: Yup.string().required("Photo is Required")
+    })
+
+    const handleImage = (e) => {
+        if (e.target.files[0]) {
+            formik.setFieldValue('photo', e.target.files[0])
+        }
+    }
     const formik = useFormik({
         initialValues: {
             name: '',
@@ -24,12 +34,13 @@ function AddCategory() {
             price: '',
             category: '',
             quantity: '',
-            photo: File,
+            photo: '',
             shipping: ''
         },
         validationSchema: validationArray,
         onSubmit: async (values) => {
             // console.log(values);
+            // handleChange(values)
             addProduct(values)
         }
     })
@@ -77,17 +88,19 @@ function AddCategory() {
                     </div>
                 </div>
                 <div className="grey-text">
-                    <label className="form-label" for="form3Example3">Category</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        name='category'
-                        onChange={formik.handleChange}
-                        value={formik.values.category}
-                    />
-                    <div className='text-danger'>
+                    <label className="form-label" for="form3Example3">Choose Your Category</label>
+                    <select className="custom-select mb-3" onChange={formik.handleChange} value={formik.values.category} name="category" >
+                        <option value="select" selected>select Category</option>
+                        {
+                            categories.map((value, key) => {
+                                return <option value={value._id} key={key}>{value.name}</option>
+                            })
+                        }
+                    </select>
+                    <div style={{color : "red"}}>{formik.touched.category ? formik.errors.category : null}</div>
+                    {/* <div className='text-danger'>
                         {formik.touched.category ? formik.errors.category : null}
-                    </div>
+                    </div> */}
                 </div>
                 <div className="grey-text">
                     <label className="form-label" for="form3Example3">Quantity</label>
@@ -104,28 +117,28 @@ function AddCategory() {
                 </div>
                 <div className="grey-text">
                     <label className="form-label" for="form3Example3">Shipping</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        name='shipping'
-                        onChange={formik.handleChange}
-                        value={formik.values.shipping}
-                    />
-                    <div className='text-danger'>
-                        {formik.touched.shipping ? formik.errors.shipping : null}
+                    <div className="mb-3  d-inline p-2 m-1" >
+                        <select className="custom-select mb-3" onChange={formik.handleChange}  value={formik.values.shipping} name="shipping" >
+                            <option value="" selected>Choose shipping</option>
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                        <div style={{color : "red"}}>{formik.touched.shipping ? formik.errors.shipping : null}</div>
                     </div>
+                    {/* <div className='text-danger'>
+                        {formik.touched.shipping ? formik.errors.shipping : null}
+                    </div> */}
                 </div>
-                <label for="formFileMultiple" class="form-label">Multiple files input example</label>
+                <label for="formFileMultiple" class="form-label">Upload Your Image</label>
                 <input
                     class="form-control"
                     type="file"
                     name='photo'
                     id="formFileMultiple"
-                    onChange={formik.handleChange}
-                    value={formik.values.photo}
+                    onChange={handleImage}
                     multiple />
-                <div className='text-danger'>
-                    {formik.touched.photo ? formik.errors.photo : null}
+                <div className='container'>
+                    {formik.values.photo && <img src={URL.createObjectURL(formik.values.photo)} alt="" />}
                 </div>
                 <div className="text-center py-4 mt-3">
                     <button className="btn btn-primary" color="cyan" type="submit">

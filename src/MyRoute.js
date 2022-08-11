@@ -13,6 +13,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AddCategory from './admin/AddCategory';
 import AddProduct from './admin/AddProduct';
 import AdminDashboard from './admin/AdminDashboard';
+import ReadAllProducts from './admin/ReadAllProducts'
 
 function MyRoute() {
     return (
@@ -33,6 +34,7 @@ function MyRoute() {
                         <Route path='/admin/dashboard' element={<AdminDashboard />} />
                         <Route path='/createcategory' element={<AddCategory />} />
                         <Route path='/addproduct' element={<AddProduct />} />
+                        <Route path='/all/product' element={<ReadAllProducts />} />
                     </Route>
                     {/* <Route>
             <PrivateRoute path='/user/dashboard' exact element={<UserDashboard />} />
