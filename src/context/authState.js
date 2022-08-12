@@ -1,6 +1,7 @@
 import React , { useReducer , useEffect , useState} from "react";
 import { useFormik } from 'formik'
 import { useNavigate } from "react-router-dom";
+import { useParams } from 'react-router-dom'
 import { request } from "../utils/Request";
 import AuthContext from "./authContext";
 import authReducer from  './authReducer';
@@ -16,12 +17,14 @@ import {
     ADD_CATEGORY,
     ADD_PRODUCT,
     GETALL_CATEGORY,
-    EDIT_PRODUCT,
-    DELETE_PRODUCT
+    GET_PRODUCT,
+    DELETE_PRODUCT,
+    GETUSER_CATEGORY
 } from "./authTypes";
 
 const AuthState = (props) => {
     const navigate = useNavigate()
+    const params = useParams()
     const [values, setValues] = useState()
     const { user, token} = isAuthenticated()
     const initialState = {
@@ -30,9 +33,12 @@ const AuthState = (props) => {
         orders: [],
         id : null,
         name : null,
+        data : [],
         values : null,
         categories : [],
         allProducts : [],
+        getAllEditProducts : [],
+        getUserDetails : null
     }
 
     const [state, dispatch] = useReducer(authReducer, initialState)
@@ -57,8 +63,8 @@ const register = async (values) => {
 const login = async (values) => {
         try {
           const res = await axios.post('/signin', values)
-          console.log("RESPONSE",res);
-          console.log("VALUES",values);
+        //   console.log("RESPONSE",res);
+        //   console.log("VALUES",values);
         if (res) {
           localStorage.setItem('token', (res.data.token))
           localStorage.setItem('user' , JSON.stringify(res.data.user))
@@ -157,6 +163,7 @@ const login = async (values) => {
             return Toast.fire({ title: 'Try again later!', icon: 'error' })
         }
     }
+
     const addProduct = async (values) => {
         const id = true
         const userToken = true
@@ -194,7 +201,7 @@ const login = async (values) => {
                 if (res.data) {
                     console.log("ALL PRODUCT RESPONSE", res);
                     dispatch({
-                        type: EDIT_PRODUCT,
+                        type: GET_PRODUCT,
                         payload: res.data
                     })
                 }
@@ -219,6 +226,53 @@ const login = async (values) => {
             console.log(error)
         }
     }
+    const getUserCategory = async(id) => {
+        try {
+            const res = await request('get', '/categories/read')
+            dispatch({
+                type: GETALL_CATEGORY,
+                payload: res.data
+            })
+            const response = await request('get', `/product/read/${id}`)
+            if (response) {
+                dispatch({
+                    type: GETUSER_CATEGORY,
+                    payload: response.data
+                })
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const editProduct  = async (values , id) => {
+        try {
+            var formData = new FormData()
+            formData.set('name', values.name)
+            formData.set('description', values.description)
+            formData.set('price', values.price)
+            formData.set('category', values.category)
+            formData.set('quantity', values.quantity)
+            if (typeof values.photo === 'object') {
+                formData.set('photo', values.photo)
+            }
+            formData.set('shipping', values.shipping)
+            console.log("THIS IS VALUES",values);
+            const res = await request('put', `/products/update/${id}/`, {formData}, true, true )
+            if (res.length) {
+                console.log("Update Product",res);
+                dispatch({
+                    type: GETUSER_CATEGORY,
+                    payload: res.data
+                })
+                // setValues(initialValues)
+                // setImages([])
+                return Toast.fire({ title: 'Product updated successfully.', icon: 'success' })
+            }
+        } catch (error) {
+            console.log(error);
+            return Toast.fire({ title: 'Try again later!', icon: 'error' })
+        }
+    }
  return (
      <AuthContext.Provider value={{
          test : "test",
@@ -227,9 +281,12 @@ const login = async (values) => {
          orders: state.orders,
          id : state.id,
          name : state.name,
+         data : state.data,
          values : state.values,
          categories : state.categories,
          allProducts : state.allProducts,
+         getAllEditProducts : state.getAllEditProducts,
+         getUserDetails : state.getUserDetails,
          register,
          login,
          signout,
@@ -239,7 +296,9 @@ const login = async (values) => {
          getAllCategory,
          addProduct,
          getAllProducts,
-         deleteProducts
+         deleteProducts,
+         getUserCategory,
+         editProduct
      }}>
          {props.children}
      </AuthContext.Provider>

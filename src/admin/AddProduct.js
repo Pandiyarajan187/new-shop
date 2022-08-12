@@ -3,11 +3,11 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import authContext from '../context/authContext'
 
-function AddCategory() {
+function AddProducts() {
 
-    const { getAllCategory, addProduct, categories } = useContext(authContext)
+    const { getAllCategory, editProduct , user , addProduct, categories } = useContext(authContext)
     useEffect(() => {
-        getAllCategory()
+        getAllCategory(user._id)
         console.log("this is category", categories);
     }, [])
 
@@ -156,4 +156,4 @@ function AddCategory() {
     )
 }
 
-export default AddCategory
+export default AddProducts

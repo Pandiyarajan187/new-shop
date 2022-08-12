@@ -6,8 +6,9 @@ import {
      ADD_CATEGORY,
      GETALL_CATEGORY,
      ADD_PRODUCT,
-     EDIT_PRODUCT
-} from "./authTypes";
+     GET_PRODUCT,
+     GETUSER_CATEGORY
+    } from "./authTypes";
 
 export default (state, action) => {
     switch (action.type) {
@@ -52,10 +53,15 @@ export default (state, action) => {
             ...state,
             data : action.payload.data
         }
-        case EDIT_PRODUCT : 
+        case GET_PRODUCT : 
         return {
             ...state,
             allProducts : action.payload
+        }
+        case GETUSER_CATEGORY : 
+        return {
+            ...state,
+            getUserDetails : action.payload
         }
         default : 
         return state;

@@ -33,9 +33,9 @@ const ReadAllProducts = () => {
                             <td>{value.price}</td>
                             <td>{value.quantity}</td>
                             <td>{value.sold}</td>
-                            <td>{value.shipping ? <i class="fas fa-check text-success"></i> : <i class="fas fa-times text-danger"></i>}</td>
+                            <td>{value.shipping ? 'Yes' : 'No '}</td>
                             <td>
-                                <Link to={`/update/product/${value._id}`} className="btn btn-sm btn-outline-success">Edit</Link>
+                                <Link to= {`/update/product/${value._id}` }  className="btn btn-sm btn-outline-success">Edit</Link>
                                 <button className="btn btn-sm btn-outline-danger" onClick={() => deleteProducts(value._id)}>Delete</button>
                             </td>
                         </tr>

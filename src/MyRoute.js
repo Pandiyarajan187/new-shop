@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Navigation from './Navigation';
 import SignIn from './user/SignIn';
 import SignUp from './user/SignUp';
@@ -13,9 +13,12 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AddCategory from './admin/AddCategory';
 import AddProduct from './admin/AddProduct';
 import AdminDashboard from './admin/AdminDashboard';
-import ReadAllProducts from './admin/ReadAllProducts'
+import ReadAllProducts from './admin/ReadAllProducts';
+import UpdateProducts from './admin/UpdateProduct';
+import authContext from './context/authContext';
 
 function MyRoute() {
+ const {user , allProducts } = useContext(authContext)
     return (
         <div>
             <Header />
@@ -35,6 +38,7 @@ function MyRoute() {
                         <Route path='/createcategory' element={<AddCategory />} />
                         <Route path='/addproduct' element={<AddProduct />} />
                         <Route path='/all/product' element={<ReadAllProducts />} />
+                        <Route path='/update/product/:id' element={<UpdateProducts />} />
                     </Route>
                     {/* <Route>
             <PrivateRoute path='/user/dashboard' exact element={<UserDashboard />} />
