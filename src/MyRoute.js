@@ -16,6 +16,10 @@ import AdminDashboard from './admin/AdminDashboard';
 import ReadAllProducts from './admin/ReadAllProducts';
 import UpdateProducts from './admin/UpdateProduct';
 import authContext from './context/authContext';
+import Product from './core/Product';
+import Cart from './core/Cart'
+import Shop from './core/Shop';
+import Search from './core/Search';
 
 function MyRoute() {
  const {user , allProducts } = useContext(authContext)
@@ -29,8 +33,12 @@ function MyRoute() {
                     <Route path='/SignIn' element={<SignIn />} />
                     <Route path='/Logout' element={<Logout />} />
 
+
                     <Route exact element={<PrivateRoute />}>
                         <Route path='/user/dashboard' element={<UserDashboard />} />
+                        <Route path='/product/:productId' element={<Product />} />
+                        <Route path='/cart' element={<Cart />} />
+                        <Route path='/shop' element={<Shop />} />
                     </Route>
 
                     <Route exact element={<AdminRoute />}>

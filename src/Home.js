@@ -1,11 +1,42 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { useState } from 'react'
+import { request } from '../src/utils/Request'
+import { useEffect } from 'react'
+import authContext from './context/authContext'
+import Card from './core/Card'
+import Search from './core/Search'
 
-function Home() {
-  return (
-    <div>
-        <h3 style={{ textAlign : 'center' , marginTop : '200px'}}>Welcome !!!</h3>
-    </div>
-  )
+const Home = () => {
+    // const [productsBySell, setProductsBySell] = useState([])
+    // const [productsByArrival, setProductsByArrival] = useState([])
+    const { getProductsBySell, getProductsForSell, getProductsByArrival, getProductsForArrival } = useContext(authContext)
+
+    useEffect(() => {
+        getProductsBySell()
+        getProductsByArrival()
+        // eslint-disable-next-line
+    }, [])
+    return (
+        <div>
+            <Search />
+            <h1>Best Sold</h1>
+            <div className="row">
+                {getProductsForSell.map((value, key) => {
+                    return <div className='col-md-3 pb-5' key={key}>
+                      <Card  product={value}/></div>
+                })}
+                {/* {console.log("*&^%$#@!@#$%^&*", getProductsForSell)} */}
+            </div>
+            <hr />
+            <h1>New Arrival</h1>
+            <div className="row">
+                {getProductsForArrival.map((value, key) => {
+                    return <div className="col-md-3 pb-5" key={key}>
+                      <Card  product={value}/></div> 
+                })}
+            </div>
+        </div>
+    )
 }
 
 export default Home

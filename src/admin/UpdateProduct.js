@@ -160,6 +160,7 @@ function AddCategory() {
                 </div>
             </form >
         </div>
+       
            { getUserDetails && <ul >
                             <ul>{getUserDetails.name}</ul>
                             <ul>{getUserDetails.description}</ul>

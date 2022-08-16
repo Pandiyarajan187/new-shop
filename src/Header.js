@@ -3,6 +3,7 @@ import { Link , useNavigate , useLocation } from 'react-router-dom'
 import { isAuthenticated } from '../src/utils/Auth'
 import { Toast } from './Notify'
 import authContext from './context/authContext'
+import { totalItem } from './utils/CartHelpers'
 
 
 function Header() {
@@ -19,7 +20,7 @@ function Header() {
 
       const isActive = (location, path) => {
         if (location.pathname === path) {
-          return { color: 'red' }
+          return { color: 'black' }
         } 
       }
 
@@ -37,8 +38,22 @@ function Header() {
                 </li>
                 </> : null }     
 
-                {user && user?.role === 0  ? 
+
+              {user && user?.role === 1 ?
+                 <li class="nav-item">
+                 <Link to="/admin/dashboard" class="nav-link" style={isActive(location, '/admin/dashboard')}>
+                   <i class="material-icons">dashboard</i>Admin Dashboard
+                 </Link>
+                   {console.log("Admin Role================>",user.role)}
+               </li> : null
+              }
+               {user && user?.role === 0  ? 
                 <>
+                 <li class="nav-item">
+                    <Link to="/user/dashboard" class="nav-link" style={isActive(location, '/user/dashboard')}>
+                      <i class="material-icons">dashboard</i> Dashboard
+                    </Link>
+                  </li>
                   <li class="nav-item">
                     <Link to="/" class="nav-link" style={isActive(location, '/')}>
                       <i class="material-icons">home</i> Home
@@ -49,20 +64,8 @@ function Header() {
                       <i class="material-icons">store</i> Shop
                     </Link>
                   </li>
-                  <li class="nav-item">
-                    <Link to="/user/dashboard" class="nav-link" style={isActive(location, '/user/dashboard')}>
-                      <i class="material-icons">dashboard</i> Dashboard
-                    </Link>
-                  </li>
+
                 </> : null 
-              }
-              {user && user?.role === 1 ?
-                 <li class="nav-item">
-                 <Link to="/admin/dashboard" class="nav-link" style={isActive(location, '/admin/dashboard')}>
-                   <i class="material-icons">dashboard</i>Admin Dashboard
-                 </Link>
-                   {console.log("Admin Role================>",user.role)}
-               </li> : null
               }
                 {user && token ? 
                 <>
@@ -71,12 +74,12 @@ function Header() {
                       <i class="material-icons">profile</i> Profiles
                     </Link>
                   </li> */}
-                  {/* <li class="button-container nav-item iframe-extern">
-                    <Link to="/cart" class="btn  btn-danger btn-sm  text-white btn-round btn-block">
-                    { totalItem() === 0 ? '' : totalItem() }
+                  <li class="button-container nav-item iframe-extern">
+                    <Link to="/cart" class="btn  btn-primary btn-sm  text-white btn-round btn-block">
                     <i class="material-icons">shopping_cart</i> Cart
+                    <span  style={{paddingLeft : '10px'}}>{totalItem() === 0 ? '' : totalItem()}</span>
                     </Link>
-                  </li> */}
+                  </li>
                   {/* <li class="nav-item">
                     <Link to="/Shop" class="nav-link" style={isActive(location, '/Shop')}>
                       <i class="material-icons">store</i> Shop
@@ -109,3 +112,30 @@ function Header() {
 }
 
 export default Header
+
+
+// import React, { useContext } from "react";
+// import { FaShoppingCart } from "react-icons/fa";
+// import { CartContext } from "./CartContext";
+
+// const Header = () => {
+//   const [cartItems] = useContext(CartContext);
+//   //Loop through the items and find the total count
+//   const totalCount = cartItems.reduce(
+//     (prevValue, currentValue) => prevValue + currentValue.count,
+//     0
+//   );
+//   return (
+//     <header>
+//       <nav>
+//         <div className="logo">CD Kart</div>
+//         <div className="cart">
+//           <FaShoppingCart size="24" />
+//           {totalCount > 0 && <span className="cart_count">{totalCount}</span>}
+//         </div>
+//       </nav>
+//     </header>
+//   );
+// };
+
+// export default Header;

@@ -1,4 +1,5 @@
 import React , { useReducer , useEffect , useState} from "react";
+import qs from 'query-string'
 import { useFormik } from 'formik'
 import { useNavigate } from "react-router-dom";
 import { useParams } from 'react-router-dom'
@@ -19,7 +20,13 @@ import {
     GETALL_CATEGORY,
     GET_PRODUCT,
     DELETE_PRODUCT,
-    GETUSER_CATEGORY
+    GETUSER_CATEGORY,
+    GETPRODUCT_BYSELL,
+    GETPRODUCT_BYARRIVAL,
+    RELATED_PRODUCTS,
+    LOAD_PRODUCT,
+    BUYER_CATEGORY,
+    SEARCH_SUBMIT
 } from "./authTypes";
 
 const AuthState = (props) => {
@@ -38,7 +45,17 @@ const AuthState = (props) => {
         categories : [],
         allProducts : [],
         getAllEditProducts : [],
-        getUserDetails : null
+        getUserDetails : [],
+        getProductsForSell : [],
+        getProductsForArrival : [],
+        getRelatedProducts : [],
+            categories: [],
+            category: 'All',
+            search: '',
+            // results: [],
+            // searched: false,
+        buyerCategory : [],
+        submitSearch : []
     }
 
     const [state, dispatch] = useReducer(authReducer, initialState)
@@ -101,7 +118,7 @@ const login = async (values) => {
                 })
            Toast.fire({ icon: 'success',title: 'Success!!!', position: 'top-end' })
             }else{
-             Toast.fire({ icon: 'error',title: 'something went wrong!!!', position: 'top-end' })
+            //  Toast.fire({ icon: 'error',title: 'something went wrong!!!', position: 'top-end' })
             }
         } catch (error) {
             console.log(error);
@@ -273,6 +290,95 @@ const login = async (values) => {
             return Toast.fire({ title: 'Try again later!', icon: 'error' })
         }
     }
+    const getProductsBySell = async() => {
+        try {
+            var queryString = '?sortBy=sold&order=desc&limit=10'
+            const res = await request('get','/products', {}, false, false, queryString)
+            if (res) {
+                dispatch({
+                    type: GETPRODUCT_BYSELL,
+                    payload: res.data
+                })
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const getProductsByArrival = async() => {
+        try {
+            var queryString = '?sortBy=createdAt&order=desc&limit=10'
+            const res = await request('get','/products',{}, false, false, queryString)
+            if (res) {
+                dispatch({
+                    type: GETPRODUCT_BYARRIVAL,
+                    payload: res.data
+                })
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const relatedProducts = async  (productId) => {
+        try {
+            const res = await request('get', `/products/related/${productId}`)
+            if (res) {
+                dispatch({
+                    type: RELATED_PRODUCTS,
+                    payload: res.data
+                })
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+    const loadProduct = async (productId) => {
+        try {
+            const res = await request('get', `/product/read/${productId}`)
+            if (res) {
+                dispatch({
+                    type: LOAD_PRODUCT,
+                    payload: res.data
+                })
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const getBuyerCategory = async() => {
+        try {
+            const res = await request('get', '/categories/read')
+            if (res) {
+                dispatch({
+                    type: GETALL_CATEGORY,
+                    payload : res.data
+                })
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const searchSubmit = async (data) => {
+        try {
+            const query = qs.stringify({ search: data.search || undefined, category : data.category })
+            const res = await request('get', `/products/search?${query}`)
+            // setData({ ...data, results: res.data, searched: true })
+             // results: [],
+            // searched: false,
+            if (res) {
+                dispatch({
+                    type: SEARCH_SUBMIT,
+                    payload : res.data
+                })
+            }
+            console.log(data);
+            
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
  return (
      <AuthContext.Provider value={{
          test : "test",
@@ -287,6 +393,12 @@ const login = async (values) => {
          allProducts : state.allProducts,
          getAllEditProducts : state.getAllEditProducts,
          getUserDetails : state.getUserDetails,
+         getProductsForSell : state.getProductsForSell, 
+         getProductsForArrival : state.getProductsForArrival,
+         getRelatedProducts  : state.getRelatedProducts,
+         datas : state.datas,
+         buyerCategory : state.buyerCategory,
+         submitSearch : state.submitSearch,
          register,
          login,
          signout,
@@ -298,7 +410,13 @@ const login = async (values) => {
          getAllProducts,
          deleteProducts,
          getUserCategory,
-         editProduct
+         editProduct,
+         getProductsBySell,
+         getProductsByArrival,
+         relatedProducts,
+         loadProduct,
+         getBuyerCategory,
+         searchSubmit
      }}>
          {props.children}
      </AuthContext.Provider>

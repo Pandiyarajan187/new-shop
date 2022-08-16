@@ -7,7 +7,13 @@ import {
      GETALL_CATEGORY,
      ADD_PRODUCT,
      GET_PRODUCT,
-     GETUSER_CATEGORY
+     GETUSER_CATEGORY,
+     GETPRODUCT_BYSELL,
+     GETPRODUCT_BYARRIVAL,
+     RELATED_PRODUCTS,
+     LOAD_PRODUCT,
+     BUYER_CATEGORY,
+     SEARCH_SUBMIT
     } from "./authTypes";
 
 export default (state, action) => {
@@ -62,6 +68,38 @@ export default (state, action) => {
         return {
             ...state,
             getUserDetails : action.payload
+        }
+        case GETPRODUCT_BYSELL : 
+        return {
+            ...state,
+            getProductsForSell : action.payload
+        }
+        case GETPRODUCT_BYARRIVAL : 
+        return {
+            ...state,
+            getProductsForArrival : action.payload
+        }
+        case RELATED_PRODUCTS : 
+        return {
+            ...state,
+            getRelatedProducts : action.payload
+        }
+        case LOAD_PRODUCT : 
+        return {
+            ...state,
+            productsLoad : action.payload.data
+        }
+        case BUYER_CATEGORY : 
+        return {
+            ...state,
+            buyerCategory : action.payload.data
+        }
+        case SEARCH_SUBMIT : 
+        return {
+            ...state,
+            // results: [],
+            searched: false,
+            submitSearch : action.payload.data
         }
         default : 
         return state;
