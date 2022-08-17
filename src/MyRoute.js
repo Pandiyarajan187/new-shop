@@ -20,6 +20,7 @@ import Product from './core/Product';
 import Cart from './core/Cart'
 import Shop from './core/Shop';
 import Search from './core/Search';
+import Welcomepage from './Welcomepage';
 
 function MyRoute() {
  const {user , allProducts } = useContext(authContext)
@@ -28,13 +29,14 @@ function MyRoute() {
             <Header />
             <Routes>
                 <>
-                    <Route path='/' element={<Home />} />
+                    <Route path='/' element={<Welcomepage />} />
                     <Route path='/SignUp' element={<SignUp />} />
                     <Route path='/SignIn' element={<SignIn />} />
                     <Route path='/Logout' element={<Logout />} />
 
 
                     <Route exact element={<PrivateRoute />}>
+                        <Route path='/Home' element={<Home />} />
                         <Route path='/user/dashboard' element={<UserDashboard />} />
                         <Route path='/product/:productId' element={<Product />} />
                         <Route path='/cart' element={<Cart />} />

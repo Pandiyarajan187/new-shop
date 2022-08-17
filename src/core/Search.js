@@ -1,5 +1,6 @@
-import React,{ useState, useEffect , useContext } from 'react'
+import React,{ useState, useEffect, Fragment , useContext } from 'react'
 import { request } from '../utils/Request'
+// import { MDBInput } from 'mdbreact'
 import qs from 'query-string'
 import Card from "../core/Card";
 import authContext from '../context/authContext';
@@ -11,27 +12,35 @@ const Search = () => {
         results: [],
         searched: false
     })
+ const {getBuyerCategory , categories, searchSubmit, submitSearch  } = useContext(authContext)
+    const { category, search, results, searched } = data
 
-    const { getBuyerCategory, categories} = useContext(authContext)
-    const {  category, search, results, searched } = data
-
+    // const getAllCategories = async() => {
+    //     try {
+    //         const res = await request('get', '/categories/read')
+    //         if (res) {
+    //             setData({ ...data, categories: res.data })
+    //         }
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
     useEffect(() => {
         getBuyerCategory()
         // eslint-disable-next-line
     }, [])
 
-    const searchSubmit = async (e) => {
+    useEffect(()=> {
+        setData({ ...data,searched: true, results: submitSearch })
+        // console.log(submitSearch);
+    },[]) 
+  
+    const submit = (e) => {
         e.preventDefault()
-        try {
             const query = qs.stringify({ search: search || undefined, category })
-            const res = await request('get', `/products/search?${query}`)
-            setData({ ...data, results: res.data, searched: true })
-            console.log(data);
-            
-        } catch (error) {
-            console.log(error);
-        }
-
+            // setData({ ...data, results: res.data, searched: true })
+            // console.log(query);
+        searchSubmit(query)
     }
 
     const handleChange = (e) => {
@@ -39,13 +48,20 @@ const Search = () => {
         setData({ ...data, [name]: value, searched: false })
     }
 
-    const searchMessage = (searched, results) => {
-        if (searched && results.length > 0) {
-            return `Found ${results.length} Products`
+    const searchMessage = (searched, submitSearch) => {
+        // if (searched && results.length > 0) {
+        //     return `Found ${results.length} Products`
+        // }
+        if(searched && submitSearch.length > 0){
+            console.log(submitSearch);
+            return `Found ${submitSearch.length} Products`
         }
-        if (searched && results.length < 1) {
-            return `No Products Found!`
+        if (!searched) {
+            return `No Products Founddddd`
         }
+        // if (searched && results.length < 1) {
+        //     return `No Products Found!`
+        // }
     }
 
     const searchedProducts = (results = []) => {
@@ -57,7 +73,7 @@ const Search = () => {
         </div>
     }
     const searchForm = (
-        <>
+        <Fragment>
             <div class="row">
                 <div class="col-md-4">
                 </div>
@@ -71,19 +87,19 @@ const Search = () => {
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <form class="form-inline" onSubmit={searchSubmit}>
+                    <form class="form-inline" onSubmit={submit}>
                         <div class="form-group ">
                             <input type="text" class="form-control" placeholder="Search" onChange={handleChange}/>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-raised btn-fab btn-round">
+                        <button type="submit" class="btn btn-white btn-raised btn-fab btn-round">
                             <i class="material-icons">search</i>
                         </button>
                     </form>
                 </div>
             </div>
-        </>
+        </Fragment>
     )
-//"btn btn-primary btn-block mb-4"
+
     return (
         <div>
             {searchForm}
@@ -93,3 +109,4 @@ const Search = () => {
 }
 
 export default Search
+//6.53

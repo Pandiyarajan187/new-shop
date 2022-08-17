@@ -52,8 +52,8 @@ const AuthState = (props) => {
             categories: [],
             category: 'All',
             search: '',
-            // results: [],
-            // searched: false,
+            results: [],
+            searched: false,
         buyerCategory : [],
         submitSearch : []
     }
@@ -90,7 +90,11 @@ const login = async (values) => {
             type: LOGIN,
             payload: res.data,
         })
-            return navigate('/')
+        if(res.data.user.role === 0){
+          return navigate('/')
+        }else{
+            return navigate('/user/dashboard')
+        }
         }
     } catch (error) {
         Toast.fire('Invalid Username or Password');
@@ -269,21 +273,22 @@ const login = async (values) => {
             formData.set('price', values.price)
             formData.set('category', values.category)
             formData.set('quantity', values.quantity)
-            if (typeof values.photo === 'object') {
-                formData.set('photo', values.photo)
-            }
+            // if (typeof values.photo === 'object') {
+            //     formData.set('photo', values.photo)
+            // }
             formData.set('shipping', values.shipping)
-            console.log("THIS IS VALUES",values);
-            const res = await request('put', `/products/update/${id}/`, {formData}, true, true )
-            if (res.length) {
-                console.log("Update Product",res);
+            // console.log("THIS IS VALUES",values);
+            const res = await request('put', `/product/update/${id}/`, formData, true, true )
+            if (res) {
+                console.log("POIUYTREWQWERTYUIO");
+                Toast.fire({ icon: 'success',title: 'Product updated successfully' })
                 dispatch({
                     type: GETUSER_CATEGORY,
                     payload: res.data
                 })
+                navigate('/user/dashborad')
                 // setValues(initialValues)
                 // setImages([])
-                return Toast.fire({ title: 'Product updated successfully.', icon: 'success' })
             }
         } catch (error) {
             console.log(error);
@@ -359,9 +364,10 @@ const login = async (values) => {
         }
     }
 
-    const searchSubmit = async (data) => {
+    const searchSubmit = async (values) => {
         try {
-            const query = qs.stringify({ search: data.search || undefined, category : data.category })
+            const query = values
+            // const query = qs.stringify({ search: data.search || undefined, category : data.category })
             const res = await request('get', `/products/search?${query}`)
             // setData({ ...data, results: res.data, searched: true })
              // results: [],
@@ -372,7 +378,7 @@ const login = async (values) => {
                     payload : res.data
                 })
             }
-            console.log(data);
+            console.log(values);
             
         } catch (error) {
             console.log(error);

@@ -82,7 +82,7 @@
 import React, { useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import authContext from '../context/authContext'
- import 'bootstrap-css-only/css/bootstrap.min.css'; 
+import 'bootstrap-css-only/css/bootstrap.min.css'; 
 
 
 
@@ -90,9 +90,9 @@ function UserDashboard() {
     const { signout } = useContext(authContext)
     return (
         <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {/* <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Dropdown
-            </button>
+            </button> */}
             <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
                 <button class="dropdown-item" type="button">Action</button>
                 <button class="dropdown-item" type="button">Another action</button>
@@ -128,4 +128,3 @@ export default UserDashboard
     <Link to = "#" data-target="#sidebar" data-toggle="collapse"><i class="fa fa-navicon fa-lg py-2 p-1"></i></Link>
 
 </div> */}
-//6.52

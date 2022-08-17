@@ -15,7 +15,7 @@ function SignUp() {
   const { register } = useContext(authContext)
 
     const validationArray = Yup.object().shape({
-        name: Yup.string().min(6).required('This is Required'),
+        name: Yup.string().min(5).required('This is Required'),
         email: Yup.string().email("Invalid Email Format").required('Email is Required'),
         password: Yup.string().min(6).required('Password is Required'),
         confirm_password: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match').required('This is Required'),
@@ -81,7 +81,7 @@ function SignUp() {
                                         <div className="row">
                                             <div className="form-outline mb-4">
                                                 <div className="form-outline">
-                                                    <label className="form-label" for="form3Example2">Name</label>
+                                                    <label  style={{paddingRight : '360px'}}  className="form-label" for="form3Example2">Name</label>
                                                     <input
                                                         type="text"
                                                         id="form3Example2"
@@ -99,7 +99,7 @@ function SignUp() {
                                         </div>
 
                                         <div className="form-outline mb-4">
-                                            <label className="form-label" for="form3Example3">Email address</label>
+                                            <label  style={{paddingRight : '310px'}}  className="form-label" for="form3Example3">Email address</label>
                                             <input
                                                 type="text"
                                                 id="form3Example3"
@@ -115,7 +115,7 @@ function SignUp() {
                                         </div>
 
                                         <div className="form-outline mb-4">
-                                            <label className="form-label" for="form3Example4">Password</label>
+                                            <label  style={{paddingRight : '360px'}}  className="form-label" for="form3Example4">Password</label>
                                             <input
                                                 type="password"
                                                 id="form3Example4"
@@ -130,7 +130,7 @@ function SignUp() {
                                             </div>
                                         </div>
                                         <div className="form-outline mb-4">
-                                            <label className="form-label" for="form3Example5">Confirm Password</label>
+                                            <label  style={{paddingRight : '290px'}}  className="form-label" for="form3Example5">Confirm Password</label>
                                             <input
                                                 type="password"
                                                 id="form3Example5"

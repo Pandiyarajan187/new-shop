@@ -77,7 +77,7 @@ function SignIn() {
                                         </div>
 
                                         <div className="form-outline mb-4">
-                                            <label className="form-label" for="form3Example3">Email address</label>
+                                            <label style={{paddingRight : '310px'}}  className="form-label" for="form3Example3">Email address</label>
                                             <input
                                                 type="text"
                                                 id="form3Example3"
@@ -93,7 +93,7 @@ function SignIn() {
                                         </div>
 
                                         <div className="form-outline mb-4">
-                                            <label className="form-label" for="form3Example4">Password</label>
+                                            <label style={{paddingRight : '360px'}}  className="form-label" for="form3Example4">Password</label>
                                             <input
                                                 type="password"
                                                 id="form3Example4"

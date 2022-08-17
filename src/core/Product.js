@@ -13,33 +13,33 @@ const Product = (props) => {
     const [product, setProduct] = useState({})
     const [related, setRelated] = useState([])
     let params = useParams()
-   const { relatedProducts, loadProduct, productsLoad, getRelatedProducts } = useContext(authContext)
-    // const relatedProducts = async  (productId) => {
-    //     try {
-    //         const res = await request('get', `/products/related/${productId}`)
-    //         if (res) {
-    //             setRelated(res.data)
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
+   const {productsLoad, getRelatedProducts } = useContext(authContext)
+    const relatedProducts = async  (productId) => {
+        try {
+            const res = await request('get', `/products/related/${productId}`)
+            if (res) {
+                setRelated(res.data)
+            }
+        } catch (error) {
+            console.log(error);
+        }
 
-    // }
+    }
     const showStock = (quantity) => {
         return quantity > 0 ? <span class="badge badge-success badge-pill">In Stock</span> : <span class="badge badge-warning badge-pill">Out of Stock</span>
     }
 
-    // const loadProduct = async (productId) => {
-    //     try {
-    //         const res = await request('get', `/product/read/${productId}`)
-    //         if (res) {
-    //             setProduct(res.data)
-    //             relatedProducts(res.data._id)
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
+    const loadProduct = async (productId) => {
+        try {
+            const res = await request('get', `/product/read/${productId}`)
+            if (res) {
+                setProduct(res.data)
+                relatedProducts(res.data._id)
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const addToCart = () => {
         addItem(product,() => {
@@ -48,12 +48,12 @@ const Product = (props) => {
     }
     useEffect(() => {
         loadProduct(params.productId)
-        relatedProducts()
+        // relatedProducts()
         // eslint-disable-next-line
     }, [props])
     return (
         <div class="product-page">
-        <div class="page-header header-filter" data-parallax="true" filter-color="red" style={{backgroundImage: "url('../assets/img/bg7.jpg')", backgroundSize: 'cover', backgroundPosition: "top center"}}>
+        <div class="page-header header-filter" data-parallax="true" filter-color="magenta" style={{backgroundImage: "url('../assets/img/bg7.jpg')", backgroundSize: 'cover', backgroundPosition: "top center"}}>
             <div class="container">
                 <div class="row title-row">
                     <div class="col-md-4 ml-auto">
@@ -76,7 +76,7 @@ const Product = (props) => {
                             <div class="card card-collapse">
                                 <div class="card-header" role="tab" id="headingOne">
                                     <h5 class="mb-0">
-                                        <a data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        <a class='primary' data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style={{color : "#9c27b0"}}>
                                             Description
                                             <i class="material-icons">keyboard_arrow_down</i>
                                         </a>
@@ -92,7 +92,7 @@ const Product = (props) => {
                                 <div class="card card-collapse">
                                     <div class="card-header" role="tab" id="headingOne">
                                     <h5 class="mb-0">
-                                        <a data-toggle="collapse" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                                        <a data-toggle="collapse" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree" style={{color : "#9c27b0"}}>
                                             Product Details
                                             <i class="material-icons">keyboard_arrow_down</i>
                                         </a>
@@ -127,7 +127,7 @@ const Product = (props) => {
                             </div>
                         </div>
                         <div class="row pull-right">
-                            <button class="btn btn-rose btn-round" onClick={addToCart}>Add to Cart &#xA0;<i class="material-icons">shopping_cart</i></button>
+                            <button class="btn btn-primary btn-round" onClick={addToCart}>Add to Cart &#xA0;<i class="material-icons">shopping_cart</i></button>
                         </div>
                     </div>
                 </div>

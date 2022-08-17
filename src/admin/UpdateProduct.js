@@ -39,16 +39,16 @@ function AddCategory() {
     }
     const formik = useFormik({
         initialValues: {
-            // ...getUserDetails,
-            // categories: getUserDetails.category,
-            // name: getUserDetails.name ,
-            // description: getUserDetails.description,
-            // category: getUserDetails.category,
-            // price: getUserDetails.price,
-            // quantity: getUserDetails.quantity,
-            // shipping: getUserDetails.shipping
+            ...getUserDetails,
+            name: getUserDetails.name ,
+            description: getUserDetails.description,
+            category: getUserDetails.category?._id,
+            price: getUserDetails.price,
+            quantity: getUserDetails.quantity,
+            shipping: getUserDetails.shipping  ? 1 : 0
         },
         validationSchema: validationArray,
+        enableReinitialize: true,
         onSubmit: async (values) => {
             // console.log(values);
             // handleChange(values)
@@ -160,15 +160,6 @@ function AddCategory() {
                 </div>
             </form >
         </div>
-       
-           { getUserDetails && <ul >
-                            <ul>{getUserDetails.name}</ul>
-                            <ul>{getUserDetails.description}</ul>
-                            <ul>{getUserDetails.price}</ul>
-                            {/* <ul>{getUserDetails.category}</ul> */}
-                            <ul>{getUserDetails.quantity}</ul>
-                            <td>{getUserDetails.shipping ? 'Yes' : 'No '}</td>
-                        </ul> }
         </div>
     )
 }
