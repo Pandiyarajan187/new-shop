@@ -378,7 +378,7 @@ const login = async (values) => {
                     payload : res.data
                 })
             }
-            console.log(values);
+            // console.log(values);
             
         } catch (error) {
             console.log(error);

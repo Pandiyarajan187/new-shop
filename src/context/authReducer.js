@@ -98,8 +98,8 @@ export default (state, action) => {
         return {
             ...state,
             // results: [],
-            searched: false,
-            submitSearch : action.payload.data
+            // searched: false,
+            submitSearch : action.payload
         }
         default : 
         return state;

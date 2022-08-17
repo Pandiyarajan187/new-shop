@@ -14,7 +14,6 @@ const Search = () => {
     })
  const {getBuyerCategory , categories, searchSubmit, submitSearch  } = useContext(authContext)
     const { category, search, results, searched } = data
-
     // const getAllCategories = async() => {
     //     try {
     //         const res = await request('get', '/categories/read')
@@ -22,24 +21,24 @@ const Search = () => {
     //             setData({ ...data, categories: res.data })
     //         }
     //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // }
-    useEffect(() => {
-        getBuyerCategory()
-        // eslint-disable-next-line
-    }, [])
-
-    useEffect(()=> {
-        setData({ ...data,searched: true, results: submitSearch })
-        // console.log(submitSearch);
-    },[]) 
-  
+        //         console.log(error)
+        //     }
+        // }
+        useEffect(() => {
+            getBuyerCategory()
+            // eslint-disable-next-line
+        }, [])
+        
+        useEffect(()=> {
+            setData({ ...data, results: submitSearch ,searched : true })
+            console.log("DDDDDDDDDDD", submitSearch);
+        },[submitSearch]) 
+        
     const submit = (e) => {
         e.preventDefault()
-            const query = qs.stringify({ search: search || undefined, category })
-            // setData({ ...data, results: res.data, searched: true })
-            // console.log(query);
+        const query = qs.stringify({ search: search || undefined, category })
+        // setData({ ...data, results: res.data, searched: true })
+        // console.log(query);
         searchSubmit(query)
     }
 
@@ -48,19 +47,20 @@ const Search = () => {
         setData({ ...data, [name]: value, searched: false })
     }
 
-    const searchMessage = (searched, submitSearch) => {
-        // if (searched && results.length > 0) {
+    const searchMessage = (searched, results) => {
+        console.log("RESULTS: ", results);
+        if (searched && results.length > 0) {
+            return `Found ${results.length} Products`
+        }
+        if (searched && results.length < 1) {
+            return `No Products Found!`
+        }
+        // if(searched && results.length > 0){
+        //     console.log(results);
         //     return `Found ${results.length} Products`
         // }
-        if(searched && submitSearch.length > 0){
-            console.log(submitSearch);
-            return `Found ${submitSearch.length} Products`
-        }
-        if (!searched) {
-            return `No Products Founddddd`
-        }
         // if (searched && results.length < 1) {
-        //     return `No Products Found!`
+        //     return `No Products Founddddd`
         // }
     }
 
@@ -104,9 +104,10 @@ const Search = () => {
         <div>
             {searchForm}
             {searchedProducts(results)}
+            {/* <th>{submitSearch.length}</th> */}
         </div>
     )
 }
 
 export default Search
-//6.53
+//21.08
