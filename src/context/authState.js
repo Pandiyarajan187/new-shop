@@ -55,7 +55,8 @@ const AuthState = (props) => {
             results: [],
             searched: false,
         buyerCategory : [],
-        submitSearch : []
+        submitSearch : [],
+        productsLoad : []
     }
 
     const [state, dispatch] = useReducer(authReducer, initialState)
@@ -345,6 +346,7 @@ const login = async (values) => {
                     type: LOAD_PRODUCT,
                     payload: res.data
                 })
+            //  relatedProducts(res.data._id)
             }
         } catch (error) {
             console.log(error);
@@ -378,7 +380,7 @@ const login = async (values) => {
                     payload : res.data
                 })
             }
-            // console.log(values);
+            console.log(values);
             
         } catch (error) {
             console.log(error);
@@ -402,6 +404,7 @@ const login = async (values) => {
          getProductsForSell : state.getProductsForSell, 
          getProductsForArrival : state.getProductsForArrival,
          getRelatedProducts  : state.getRelatedProducts,
+         productsLoad : state.productsLoad,
          datas : state.datas,
          buyerCategory : state.buyerCategory,
          submitSearch : state.submitSearch,

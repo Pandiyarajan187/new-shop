@@ -87,7 +87,7 @@ export default (state, action) => {
         case LOAD_PRODUCT : 
         return {
             ...state,
-            productsLoad : action.payload.data
+            productsLoad : action.payload
         }
         case BUYER_CATEGORY : 
         return {

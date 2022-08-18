@@ -48,8 +48,8 @@ const Card = ({ product, showButton = true, showAddToCart = true, cartUpdate = f
                     <p>Added on {moment(product.createdAt).fromNow()}</p>
                     <div class="price-container">
                         {showStock(product.quantity)}<br /><br />
-                        {product.price - 20 < 0 ? null : <span class="price price-old"> RS. {product.price - 20}</span> }
-                        <span class="price price-new"> RS. {product.price}</span>
+                        {product.price - 20 < 0 ? null : <span class="price price-old"> RS. {product.price}</span> }
+                        <span class="price price-new"> RS. {product.price - 20}</span>
                     </div>
                 </div>
             <div class="card-footer">

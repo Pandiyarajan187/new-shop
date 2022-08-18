@@ -12,8 +12,8 @@ const Home = () => {
     const { getProductsBySell, getProductsForSell, getProductsByArrival, getProductsForArrival } = useContext(authContext)
 
     useEffect(() => {
-        getProductsBySell()
         getProductsByArrival()
+        getProductsBySell()
         // eslint-disable-next-line
     }, [])
     return (
@@ -23,9 +23,9 @@ const Home = () => {
             <div className="row">
                 {getProductsForSell.map((value, key) => {
                     return <div className='col-md-3 pb-5' key={key}>
+                        {console.log("*&^%$#@!@#$%^&*", value)}
                       <Card  product={value}/></div>
                 })}
-                {/* {console.log("*&^%$#@!@#$%^&*", getProductsForSell)} */}
             </div>
             <hr />
             <h1>New Arrival</h1>

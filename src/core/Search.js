@@ -14,6 +14,7 @@ const Search = () => {
     })
  const {getBuyerCategory , categories, searchSubmit, submitSearch  } = useContext(authContext)
     const { category, search, results, searched } = data
+
     // const getAllCategories = async() => {
     //     try {
     //         const res = await request('get', '/categories/read')
@@ -21,24 +22,24 @@ const Search = () => {
     //             setData({ ...data, categories: res.data })
     //         }
     //     } catch (error) {
-        //         console.log(error)
-        //     }
-        // }
-        useEffect(() => {
-            getBuyerCategory()
-            // eslint-disable-next-line
-        }, [])
-        
-        useEffect(()=> {
-            setData({ ...data, results: submitSearch ,searched : true })
-            console.log("DDDDDDDDDDD", submitSearch);
-        },[submitSearch]) 
-        
+    //         console.log(error)
+    //     }
+    // }
+    useEffect(() => {
+        getBuyerCategory()
+        // eslint-disable-next-line
+    }, [])
+
+    useEffect(()=> {
+        setData({ ...data, results: submitSearch , searched : true})
+        // console.log(submitSearch);
+    },[submitSearch]) 
+  
     const submit = (e) => {
         e.preventDefault()
-        const query = qs.stringify({ search: search || undefined, category })
-        // setData({ ...data, results: res.data, searched: true })
-        // console.log(query);
+            const query = qs.stringify({ search: search || undefined, category })
+            // setData({ ...data, results: res.data, searched: true })
+            // console.log(query);
         searchSubmit(query)
     }
 
@@ -48,23 +49,15 @@ const Search = () => {
     }
 
     const searchMessage = (searched, results) => {
-        console.log("RESULTS: ", results);
         if (searched && results.length > 0) {
             return `Found ${results.length} Products`
         }
-        if (searched && results.length < 1) {
+        if (searched  && results.length < 1) {
             return `No Products Found!`
         }
-        // if(searched && results.length > 0){
-        //     console.log(results);
-        //     return `Found ${results.length} Products`
-        // }
-        // if (searched && results.length < 1) {
-        //     return `No Products Founddddd`
-        // }
     }
 
-    const searchedProducts = (results = []) => {
+    const searchedProducts = (results = [] ) => {
         return <div>
             <h2 >{searchMessage(searched, results)}</h2>
             <div className="row">
@@ -104,10 +97,8 @@ const Search = () => {
         <div>
             {searchForm}
             {searchedProducts(results)}
-            {/* <th>{submitSearch.length}</th> */}
         </div>
     )
 }
 
 export default Search
-//21.08
