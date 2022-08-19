@@ -26,13 +26,20 @@ import {
     RELATED_PRODUCTS,
     LOAD_PRODUCT,
     BUYER_CATEGORY,
-    SEARCH_SUBMIT
+    SEARCH_SUBMIT,
+    ADD_ITEM,
+    REMOVE_ITEM,
+    GET_ITEM,
+    TOTAL_ITEM,
+    UPDATE_ITEM
 } from "./authTypes";
 
 const AuthState = (props) => {
     const navigate = useNavigate()
     const params = useParams()
     const [values, setValues] = useState()
+    const [add, setAdd] = useState(null)
+    const [remove, setRemove] = useState(null)
     const { user, token} = isAuthenticated()
     const initialState = {
         token,
@@ -56,7 +63,12 @@ const AuthState = (props) => {
             searched: false,
         buyerCategory : [],
         submitSearch : [],
-        productsLoad : []
+        productsLoad : [],
+        addItem : [],
+        removeItem : [],
+        getItem : [],
+        totalItem : [],
+        updateItem :[]
     }
 
     const [state, dispatch] = useReducer(authReducer, initialState)
@@ -81,9 +93,9 @@ const register = async (values) => {
 const login = async (values) => {
         try {
           const res = await axios.post('/signin', values)
-        //   console.log("RESPONSE",res);
-        //   console.log("VALUES",values);
-        if (res) {
+          //   console.log("VALUES",values);
+          if (res) {
+              console.log("RESPONSE",res);
           localStorage.setItem('token', (res.data.token))
           localStorage.setItem('user' , JSON.stringify(res.data.user))
           Toast.fire({ icon: 'success',title: `Welcome back, ${res.data.user.name}`, position: 'top-end' })
@@ -387,6 +399,120 @@ const login = async (values) => {
         }
 
     }
+
+  const addCartItem = async ( item ) => {
+        let cart = []
+            if (localStorage.getItem('cart')) {
+                cart = JSON.parse(localStorage.getItem('cart'))
+            }
+            // console.log(cart,item,cart.find(element => element._id !== item._id))
+            if(!cart.find(element => element._id === item._id) ){
+                Toast.fire({ icon: 'success' , title: 'Cart Added Successfully'});
+                cart.push(item)
+            }else{
+                Toast.fire({ icon: 'error' , title: 'Cart is Already Added'});
+            }
+    
+             localStorage.setItem("cart", JSON.stringify(cart));
+             if (cart) {
+                dispatch({
+                    type: ADD_ITEM,
+                    payload : cart
+                })
+            }
+    }
+ const removeCartItem = async (productId) => {
+        let cart = []
+        if (typeof window !== 'undefined') {
+            if (localStorage.getItem('cart')) {
+                cart = JSON.parse(localStorage.getItem('cart'))
+            }
+        }
+        // eslint-disable-next-line
+        cart.map((value, key) => {
+            if (value._id === productId) {
+                cart.splice(key, 1)
+            }
+            localStorage.setItem('cart', JSON.stringify(cart))
+        })
+        if (cart) {
+            dispatch({
+                type: REMOVE_ITEM,
+                payload : cart
+            })
+        }
+        getCartItem()
+        totalCartFunc()
+    }
+
+ const getCartItem = async () => {
+    if (typeof window !== 'undefined') {
+        if (localStorage.getItem('cart')) {
+           let cart = JSON.parse(localStorage.getItem('cart'))
+        //    updateCartFunc(productId, quantity)
+            if (cart) {
+                dispatch({
+                    type: GET_ITEM,
+                    payload : cart
+                })
+            }
+        }
+    }
+    return []
+}
+const totalCartFunc = async () => {
+    let cart = []
+    if (typeof window !== 'undefined') {
+        if (localStorage.getItem('cart')) {
+            let cart = JSON.parse(localStorage.getItem('cart'))
+            // let cartLength = cart.length
+            console.log("cart.length=======>",cart);
+            if (cart.length > 0) {
+                dispatch({
+                    type: TOTAL_ITEM,
+                    payload : cart
+                })
+        }
+        if(cart.length  === 0){
+            // console.log("cart.length=======>",cart.length);
+            dispatch({
+                type: TOTAL_ITEM,
+                payload :[]
+            })
+        }
+    }
+
+}
+}
+const updateCartFunc = async (productId, quantity) => {
+    let cart = []
+    cart = JSON.parse(localStorage.getItem('cart'))
+    if(cart){
+        for(let value of cart){
+            if(value._id === productId){
+             value.quantity = quantity;
+            }
+         }
+         localStorage.setItem("cart", JSON.stringify(cart));
+         getCartItem()
+         dispatch({
+            type: UPDATE_ITEM,
+            payload : cart
+        })
+    }
+
+ // Update Quantity 
+ }
+     const handleAdd = async (id , quantity) => {
+         var add = quantity + 1
+        setAdd(add)
+        updateCartFunc(id , add)
+    }
+    const handleRemove = async (id , quantity) => {
+        var remove = quantity - 1
+        setAdd(remove)
+        updateCartFunc(id , remove)
+    }
  return (
      <AuthContext.Provider value={{
          test : "test",
@@ -408,6 +534,11 @@ const login = async (values) => {
          datas : state.datas,
          buyerCategory : state.buyerCategory,
          submitSearch : state.submitSearch,
+         addItem : state.addItem,
+         removeItem : state.removeItem,
+         getItem : state.getItem,
+         totalItem : state.totalItem,
+         updateItem : state.updateItem,
          register,
          login,
          signout,
@@ -425,7 +556,14 @@ const login = async (values) => {
          relatedProducts,
          loadProduct,
          getBuyerCategory,
-         searchSubmit
+         searchSubmit,
+         addCartItem,
+         removeCartItem,
+         getCartItem,
+         totalCartFunc,
+         updateCartFunc,
+         handleAdd,
+         handleRemove
      }}>
          {props.children}
      </AuthContext.Provider>

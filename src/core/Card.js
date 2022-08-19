@@ -1,17 +1,22 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import ShowImage from './ShowImage';
 import moment from 'moment'
-import { addItem, updateItem, removeItem } from '../utils/CartHelpers';
+import { updateItem, removeItem } from '../utils/CartHelpers';
+import authContext from '../context/authContext';
+
+
 const Card = ({ product, showButton = true, showAddToCart = true, cartUpdate = false, showRemoveCartButton = false }) => {
     const [count, setCount] = useState(null)
+    const {addCartItem , totalCartFunc} = useContext(authContext)
     const showStock = (quantity) => {
         return quantity > 0 ? <span class="badge badge-success badge-pill">In Stock</span> : <span class="badge badge-warning badge-pill">Out of Stock</span>
     }
     const addToCart = () => {
-        addItem(product,() => {
+        addCartItem(product,() => {
             console.log(localStorage.getItem('cart'))
         })
+        totalCartFunc()
     }
     const handleChange = (productId) => (e) => {
         setCount(e.target.value < 1 ? 1 : e.target.value)

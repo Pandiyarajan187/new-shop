@@ -13,7 +13,12 @@ import {
      RELATED_PRODUCTS,
      LOAD_PRODUCT,
      BUYER_CATEGORY,
-     SEARCH_SUBMIT
+     SEARCH_SUBMIT,
+     ADD_ITEM,
+     REMOVE_ITEM,
+     GET_ITEM,
+     TOTAL_ITEM,
+     UPDATE_ITEM
     } from "./authTypes";
 
 export default (state, action) => {
@@ -100,6 +105,31 @@ export default (state, action) => {
             // results: [],
             // searched: false,
             submitSearch : action.payload
+        }
+        case ADD_ITEM : 
+        return {
+            ...state,
+            addItem : action.payload
+        }
+        case REMOVE_ITEM : 
+        return {
+            ...state,
+            removeItem : action.payload
+        }
+        case GET_ITEM : 
+        return {
+            ...state,
+            getItem : action.payload
+        }
+        case TOTAL_ITEM : 
+        return {
+            ...state,
+            totalItem : action.payload
+        }
+        case UPDATE_ITEM : 
+        return {
+            ...state,
+            updateItem : action.payload
         }
         default : 
         return state;

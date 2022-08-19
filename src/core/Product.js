@@ -13,7 +13,7 @@ const Product = (props) => {
     // const [product, setProduct] = useState({})
     // const [related, setRelated] = useState([])
     let params = useParams()
-    const { productsLoad, getRelatedProducts, relatedProducts, loadProduct, } = useContext(authContext)
+    const { productsLoad, getRelatedProducts, relatedProducts, loadProduct, totalCartFunc ,addCartItem } = useContext(authContext)
     // const relatedProducts = async  (productId) => {
     //     try {
     //         const res = await request('get', `/products/related/${productId}`)
@@ -42,9 +42,10 @@ const Product = (props) => {
     // }
 
     const addToCart = () => {
-        addItem(productsLoad, () => {
+        addCartItem(productsLoad, () => {
             console.log(localStorage.getItem('cart'))
         })
+        totalCartFunc()
     }
     useEffect(() => {
         loadProduct(params.productId)

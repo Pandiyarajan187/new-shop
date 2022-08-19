@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { useState, useEffect } from 'react'
-import { getItem, totalItem ,updateItem , removeItem } from '../utils/CartHelpers'
+import { updateItem  } from '../utils/CartHelpers'
 import Card from './Card'
 import { Link } from 'react-router-dom'
 import Checkout from './Checkout'
@@ -9,23 +9,24 @@ import authContext from '../context/authContext'
 
 
 const Cart = () => {
-    const {} = useContext(authContext)
+    const {removeCartItem , getCartItem , getItem , totalCartFunc , totalItem , updateItem , updateCartFunc , handleAdd ,handleRemove} = useContext(authContext)
     const [add, setAdd] = useState(null)
     const [remove, setRemove] = useState(null)
     const [items, setItems] = useState([])
 
-    const handleAdd = (id , e) => {
-         var add = e + 1
-        setAdd(add)
-        updateItem(id , add)
-        console.log("++++++++++++", add);
-    }
-    const handleRemove = (id , e) => {
-        var remove = e - 1
-        setAdd(remove)
-        updateItem(id , remove)
-        console.log("-----------", remove);
-    }
+    // const handleAdd = (id , e) => {
+    //      var add = e + 1
+    //     setAdd(add)
+    //     updateCartFunc(id , add)
+    //     console.log("++++++++++++", add);
+    // }
+    // const handleRemove = (id , e) => {
+    //     var remove = e - 1
+    //     setAdd(remove)
+    //     updateCartFunc(id , remove)
+    //     console.log("-----------", remove);
+    // }
+    console.log(totalItem,'++++++++++++++')
     const showItems = (items) => {
         return (
 
@@ -34,7 +35,7 @@ const Cart = () => {
                     <div class="container">
                         <div class="row">
                             <div class="col-md-8 ml-auto mr-auto text-center">
-                                <h2 class="title">Your Cart Has {totalItem()} Items</h2>
+                                <h2 class="title">Your Cart Has {totalItem.length} Items</h2>
                             </div>
                         </div>
                     </div>
@@ -73,7 +74,7 @@ const Cart = () => {
                                                     </td>
                                                     <td>
                                                     <div class="img-container">
-                                                       <button style={{width : '60%'}} className="btn btn-primary btn-block mb-2" onClick={()=>{removeItem(value._id)}}>Delete</button>
+                                                       <button style={{width : '60%'}} className="btn btn-primary btn-block mb-2" onClick={()=>{removeCartItem(value._id)}}>Delete</button>
                                                     </div>
                                                 </td>
                                                 </tr>
@@ -104,15 +105,20 @@ const Cart = () => {
         <div>
             <h2>Your cart is empty</h2>
             <br />
-            <Link to="/shop">Continue Shopping</Link>
+            <button className="btn btn-primary">
+            <Link  style={{color : 'white'}} to="/shop">Continue Shopping</Link>
+            </button>
         </div>
     )
     useEffect(() => {
-        setItems(getItem())
+        getCartItem()
+        totalCartFunc()
+        setItems(getItem)
     }, [])
     return (
         <div>
-            {totalItem() > 0 ? showItems(items) : noItemMessage()}
+            {totalItem.length > 0 ? showItems(getItem) : noItemMessage()}
+            {console.log("totalItem.length ",totalItem.length )}
             <div>
         
             <div className="row">

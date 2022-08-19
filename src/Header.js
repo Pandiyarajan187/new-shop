@@ -3,13 +3,12 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { isAuthenticated } from '../src/utils/Auth'
 import { Toast } from './Notify'
 import authContext from './context/authContext'
-import { totalItem } from './utils/CartHelpers'
 
 
 function Header() {
   let navigate = useNavigate()
   let location = useLocation()
-  const { user, token, userDashboard, signout } = useContext(authContext)
+  const { user, token, userDashboard, signout ,totalItem ,totalCartFunc} = useContext(authContext)
   // const {user} = user
 
   useEffect(() => {
@@ -23,6 +22,7 @@ function Header() {
       return { color: 'black' }
     }
   }
+  console.log("totalItem",totalItem);
 
   return (
     <div>
@@ -74,7 +74,7 @@ function Header() {
               <li class="button-container nav-item iframe-extern">
                 <Link to="/cart" class="btn  btn-primary btn-sm  text-white btn-round btn-block">
                   <i class="material-icons">shopping_cart</i> Cart
-                  <span style={{ paddingLeft: '10px' }}>{totalItem() === 0 ? '' : totalItem()}</span>
+                  <span  style={{ paddingLeft: '10px' }}>{totalItem?.length === 0 ? '' : totalItem?.length }</span>
                 </Link>
               </li>
 

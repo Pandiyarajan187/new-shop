@@ -9,11 +9,12 @@ import Search from './core/Search'
 const Home = () => {
     // const [productsBySell, setProductsBySell] = useState([])
     // const [productsByArrival, setProductsByArrival] = useState([])
-    const { getProductsBySell, getProductsForSell, getProductsByArrival, getProductsForArrival } = useContext(authContext)
+    const { getProductsBySell, getProductsForSell, getProductsByArrival, getProductsForArrival , totalCartFunc} = useContext(authContext)
 
     useEffect(() => {
         getProductsByArrival()
         getProductsBySell()
+        totalCartFunc()
         // eslint-disable-next-line
     }, [])
     return (

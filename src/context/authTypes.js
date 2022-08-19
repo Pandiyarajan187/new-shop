@@ -16,6 +16,13 @@ export const RELATED_PRODUCTS = 'RELATED_PRODUCTS';
 export const LOAD_PRODUCT = 'LOAD_PRODUCT';
 export const BUYER_CATEGORY = 'BUYER_CATEGORY';
 export const SEARCH_SUBMIT = 'SEARCH_SUBMIT';
+export const ADD_ITEM = 'ADD_ITEM';
+export const REMOVE_ITEM = 'REMOVE_ITEM';
+export const UPDATE_ITEM = 'UPDATE_ITEM';
+export const TOTAL_ITEM = 'TOTAL_ITEM';
+export const GET_ITEM = 'GET_ITEM';
+
+
 
 
 
