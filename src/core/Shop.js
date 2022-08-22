@@ -1,43 +1,28 @@
-import React, { useEffect, useMemo, useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useState } from 'react';
 import { request } from '../utils/Request';
 import CheckBox from './CheckBox';
 import RadioBox from './RadioBox';
 import { prices } from "../utils/FixedPrices";
 import Card from './Card';
-import authContext from "../context/authContext";
-
+import authContext from '../context/authContext';
+import { Toast } from '../Notify'
+import 'react-toastify/dist/ReactToastify.css';
+import { rest } from 'lodash';
+import { useNavigate } from 'react-router-dom';
 const Shop = () => {
-    const { getBuyerCategory, categories } = useContext(authContext)
 
-    const [categoryList, setCategoryList] = useState([]);
-    const [checked, setChecked] = useState(false)
-
-    const [selectedCategory, setSelectedCategory] = useState();
-    const [limit, setLimit] = useState(6)
+    // const [categories, setCategories] = useState([])
+    const {categories ,getBuyerCategory}= useContext(authContext)
+    const navigate = useNavigate()
+    const [limit, setLimit] = useState(9)
     const [skip, setSkip] = useState(0)
     const [size, setSize] = useState(0)
+    const [trigger, setTrigger] = useState(false)
     const [myFilters,setMyFilters] = useState({
         filters: { category: [], price: [] }
     })
-
-    // Add default value on page load
-    useEffect(() => {
-        getBuyerCategory()
-        setCategoryList(categories);
-    }, []);
-
-    // Function to get filtered list
-    function getFilteredList() {
-        // Avoid filter when selectedCategory is null
-        if (!selectedCategory) {
-            return categoryList;
-        }
-        return categoryList.filter((item) => item.category === selectedCategory);
-    }
-
-    // Avoid duplicate function calls with useMemo
-    var filteredList = useMemo(getFilteredList, [selectedCategory, categoryList]);
+    const [filteredResults,setFilteredResults] = useState([])
 
     const loadFilterResults = async (newFilters) => {
         try {
@@ -48,33 +33,74 @@ const Shop = () => {
             }
             const res = await request('post', '/products/search', data)
             if (res) {
-                // setFilteredResults(res.data.data)
-                setSize(res.data.size)
-                setSkip(0)
+                // console.log('SERACH RESPONE' , res);
+                setFilteredResults(res.data.data)
             }
         } catch (error) {
             console.log(error)
         }
     }
-    function handleCategoryChange(event) {
-        loadFilterResults()
-        setSelectedCategory(event.target.value);
 
+    useEffect(() => {
+        getBuyerCategory()
+        loadFilterResults(myFilters.filters)
+    },[])
+ 
+
+    const handleFilter = (filters, filterBy) => {
+        const newFilters = { ...myFilters }
+        // console.log("filters",filters);
+        newFilters.filters[filterBy] = filters
+        
+        
+        if(filterBy === 'price'){
+            let priceValues = handlePrice(filters)
+            console.log("filters",filters);
+            newFilters.filters[filterBy] = priceValues
+        }
+
+        loadFilterResults(myFilters.filters)
+        setMyFilters(newFilters)
     }
-    //===============================================
-    // Radio Button
 
+    const handlePrice = (value) => {
+        const data = prices
+        let array = []
+        for(let key in data) {
+            if(data[key]._id === parseInt(value))
+            array = data[key].array
+
+
+        }
+        return array
+    }
+    const reset = () => {
+        console.log('jhgvvvvvvvvvvvvvvvvvvvv')
+    //     setMyFilters({
+    //     filters: { category: [], price: [] }
+    // })
+    for (const checkbox of document.querySelectorAll('.check')) {
+        //iterating over all matched elements
+        checkbox.checked = false //for selection
+        }
+        for (const setvalue of document.querySelectorAll('.set')) {
+            //iterating over all matched elements
+            setvalue.checked = false //for selection
+            }
+    setTrigger(true)
+    loadFilterResults()
+}
     return (
         <div class="container">
             <h2 class="section-title">Find what you need</h2>
-            <div class="row">
-                <div class="col-md-2">
-                    <div class="card card-refine card-plain card-rose">
-                        <div class="card-body">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="card card-refine card-plain card-rose">
+                            <div class="card-body">
                             <h4 class="card-title">
                                 Reset
                                 <button class="btn btn-default btn-fab btn-fab-mini btn-link pull-right" rel="tooltip" title="" data-original-title="Reset Filter">
-                                    <i class="material-icons">cached</i>
+                                    <i onClick={reset} class="material-icons">cached</i>
                                 </button>
                             </h4>
                             <div id="accordion" role="tablist">
@@ -89,24 +115,8 @@ const Shop = () => {
                                     </div>
                                     <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
                                         <div class="card-body">
-                                            {/* <CheckBox categories={categories} onChange={handleCategoryChange} filteredList={filteredList}/> */}
-                                            {categories.map((value, key) => {
-                                                return <div class="form-check" key={key}>
-                                                    <label class="form-check-label">
-                                                        <input class="form-check-input" 
-                                                        id={`check${key}`} 
-                                                        name={`check${key}`} 
-                                                        onChange={handleCategoryChange} 
-                                                        type="checkbox" 
-                                                        // value={checked.indexOf(value._id === -1)} 
-                                                        />
-                                                        {value.name}
-                                                        <span class="form-check-sign">
-                                                            <span class="check"></span>
-                                                        </span>
-                                                    </label>
-                                                </div>
-                                            })}
+                                            <CheckBox categories={categories} reset={reset}
+                                            handleFilter={filters => handleFilter(filters, 'category')} trigger={trigger}/>
                                         </div>
                                     </div>
                                 </div>
@@ -115,13 +125,14 @@ const Shop = () => {
                                         <h5 class="mb-0">
                                             <a class="collapsed" data-toggle="collapse" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" style={{ color: "#9c27b0" }}>
                                                 Filter By Price Range
-                                                <i class="material-icons">keyboard_arrow_down</i>
+                                            <i class="material-icons">keyboard_arrow_down</i>
                                             </a>
                                         </h5>
                                     </div>
                                     <div id="collapseThree" class="collapse show" role="tabpanel" aria-labelledby="headingThree">
                                         <div class="card-body">
-                                            <RadioBox prices={prices} />
+                                            <RadioBox prices={prices} trigger={trigger}
+                                            handleFilter={filters => handleFilter(filters, 'price')}/>
                                         </div>
                                     </div>
                                 </div>
@@ -131,12 +142,12 @@ const Shop = () => {
                 </div>
                 <div class="col-md-10">
                     <div class="row">
-                        {filteredList.map((value, key) => {
-                            return <div className="col-md-4 pb-5" key={key}><Card product={value} /></div>
+                        {filteredResults.map((value, key) => {
+                            return <div  className="col-md-4 pb-5" key={key}><Card  product={value}/></div>
                         })}
                     </div>
                     <hr />
-                    {/* <div className="text-center" style={{ color: "#9c27b0" }}>
+                    {/* <div className="text-center">
                         {loadMoreButton()}
                     </div> */}
                 </div>
@@ -146,3 +157,4 @@ const Shop = () => {
 }
 
 export default Shop
+//6.28

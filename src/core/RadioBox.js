@@ -1,25 +1,34 @@
-import React,{ useState } from 'react'
+import React,{ useState , useEffect } from 'react'
 
-const RadioBox = ({ prices }) => {
+const RadioBox = ({ prices, handleFilter , trigger }) => {
     // eslint-disable-next-line
-
     const [value, setValue] = useState(0)
     const handleChange = (e) => {
-        // handleFilter(e.target.value)
+        handleFilter(e.target.value)
+        // console.log(e.target.value);
         setValue(e.target.value)
     }
+    useEffect(() => {
+        if(trigger){
+            setValue(0)
+            handleFilter(0)
+        }
+        console.log(trigger)
+    },[trigger])
     return (
         <div>
             {
                 prices.map((price, key) => {
                     return  <div class="form-check" key={key}>
                                 <label class="form-check-label" htmlFor={`radio${key}`}>
-                                    <input class="form-check-input"  
-                                    onChange={handleChange} 
+                                    <input 
+                                    className={`set form-check-input`} 
                                     type="radio"
+                                     onChange={handleChange} 
                                      value={`${price._id}`} 
                                      id={`radio${key}`} 
-                                     name={price} />
+                                     name={price} 
+                                     />
                                     {price.name}
                                     <span class="circle">
                                         <span class="check"></span>

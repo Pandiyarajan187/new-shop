@@ -9,13 +9,18 @@ import Search from './core/Search'
 const Home = () => {
     // const [productsBySell, setProductsBySell] = useState([])
     // const [productsByArrival, setProductsByArrival] = useState([])
-    const { getProductsBySell, getProductsForSell, getProductsByArrival, getProductsForArrival , totalCartFunc} = useContext(authContext)
+    const { 
+        getProductsBySell, 
+        getProductsForSell, 
+        getProductsByArrival, 
+        getProductsForArrival , 
+        totalCartFunc
+    } = useContext(authContext)
 
     useEffect(() => {
-        getProductsByArrival()
         getProductsBySell()
+        getProductsByArrival()
         totalCartFunc()
-        // eslint-disable-next-line
     }, [])
     return (
         <div>
@@ -24,7 +29,6 @@ const Home = () => {
             <div className="row">
                 {getProductsForSell.map((value, key) => {
                     return <div className='col-md-3 pb-5' key={key}>
-                        {console.log("*&^%$#@!@#$%^&*", value)}
                       <Card  product={value}/></div>
                 })}
             </div>

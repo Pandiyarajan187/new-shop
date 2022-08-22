@@ -95,7 +95,6 @@
 // };
  
 // export default Welcome;
-//6.30
 
 import React from 'react'
 

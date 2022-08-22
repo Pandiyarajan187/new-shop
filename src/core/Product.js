@@ -50,7 +50,6 @@ const Product = (props) => {
     useEffect(() => {
         loadProduct(params.productId)
         // relatedProducts(productsLoad._id)
-        // eslint-disable-next-line
     }, [])
     return (
         <div class="product-page">

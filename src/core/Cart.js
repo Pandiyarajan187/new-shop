@@ -117,8 +117,8 @@ const Cart = () => {
     }, [])
     return (
         <div>
-            {totalItem.length > 0 ? showItems(getItem) : noItemMessage()}
-            {console.log("totalItem.length ",totalItem.length )}
+            {totalItem?.length > 0 ? showItems(getItem) : noItemMessage()}
+            {/* {console.log("totalItem.length ",totalItem.length )} */}
             <div>
         
             <div className="row">

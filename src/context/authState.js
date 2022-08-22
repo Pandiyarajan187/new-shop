@@ -117,6 +117,7 @@ const login = async (values) => {
   const signout = (data) => {
     localStorage.removeItem('token')
     localStorage.removeItem('user')
+    localStorage.removeItem('cart')
     Toast.fire({ icon: 'success' ,title: 'Sign out successfully.' })
     dispatch({
         type: LOGOUT,

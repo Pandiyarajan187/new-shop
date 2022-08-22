@@ -30,7 +30,7 @@ export const prices = [
         array: [400, 499]
     },
     {
-        _id: 5,
+        _id: 6,
         name: 'More than 500',
         array: [500, 9999999]
     },
