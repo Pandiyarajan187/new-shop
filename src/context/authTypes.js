@@ -21,6 +21,8 @@ export const REMOVE_ITEM = 'REMOVE_ITEM';
 export const UPDATE_ITEM = 'UPDATE_ITEM';
 export const TOTAL_ITEM = 'TOTAL_ITEM';
 export const GET_ITEM = 'GET_ITEM';
+export const REMOVE_PRODUCT = 'REMOVE_PRODUCT';
+export const DETAILS = 'DETAILS';
 
 
 

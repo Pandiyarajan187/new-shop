@@ -31,7 +31,9 @@ import {
     REMOVE_ITEM,
     GET_ITEM,
     TOTAL_ITEM,
-    UPDATE_ITEM
+    UPDATE_ITEM,
+    REMOVE_PRODUCT,
+    DETAILS
 } from "./authTypes";
 
 const AuthState = (props) => {
@@ -68,7 +70,10 @@ const AuthState = (props) => {
         removeItem : [],
         getItem : [],
         totalItem : [],
-        updateItem :[]
+        updateItem :[],
+        showAddToCart : true,
+        showRemoveCartButton : false,
+        details : []
     }
 
     const [state, dispatch] = useReducer(authReducer, initialState)
@@ -104,11 +109,11 @@ const login = async (values) => {
             payload: res.data,
         })
         if(res.data.user.role === 0){
-          return navigate('/')
+            return navigate('/Home')
         }else{
-            return navigate('/user/dashboard')
+            return navigate('/admin/dashboard')
         }
-        }
+    }
     } catch (error) {
         Toast.fire('Invalid Username or Password');
         console.log("THIS IS ERROR",error);
@@ -142,18 +147,28 @@ const login = async (values) => {
             console.log(error);
         }
     } 
-    const profileUpdate = async (user) => {
+    const profileUpdate = async (values , id) => {
+        // const id = true
+        // const userToken = true
         try {
-            const res = await request('put', '/user/update/', {  email: user.email }, true, true)
-            if(res.data.email ){
-                dispatch({
-                    type: PROFILE_UPDATE,
-                    payload: res.data,
-                })
-                let user = JSON.parse(localStorage.getItem('token'))
-                user.user.name = res.data.name
-                localStorage.setItem('token', JSON.stringify(user))
-                return Toast.fire({ title: 'Profile Updated Successfully!', icon: 'success' })
+            // var formData = new FormData()
+            // formData.set('name', values.name)
+            const res = await request('put', '/user/update/',  { name: values.name } ,true ,true)
+            if(res){
+                // dispatch({
+                //     type: PROFILE_UPDATE,
+                //     payload: res.data,
+                // })
+                let user = []
+                user = JSON.parse(localStorage.getItem('user'))
+                if(user){
+                    console.log(user);
+                        if(user._id === id){
+                            user.name = values.name;
+                        }
+                     localStorage.setItem("user", JSON.stringify(user));
+                    Toast.fire({ title: 'Profile Updated Successfully!', icon: 'success' })
+            }
             }else{
              Toast.fire({ icon: 'error',title: 'something went wrong!!!', position: 'top-end' })
             }
@@ -175,7 +190,7 @@ const login = async (values) => {
                     type: ADD_CATEGORY,
                     payload: res.data,
                 })
-                navigate('/createcategory')
+                navigate('/admin/dashboard')
             } else {
                 Toast.fire({ title: 'Category Already exists.', icon: 'error' })
             }
@@ -221,6 +236,7 @@ const login = async (values) => {
                     type: ADD_PRODUCT,
                     payload: res.data
                 })
+                navigate('/admin/dashboard')
             } else {
                 Toast.fire({ title: 'Failed', icon: 'error' })
             }
@@ -300,7 +316,7 @@ const login = async (values) => {
                     type: GETUSER_CATEGORY,
                     payload: res.data
                 })
-                navigate('/user/dashborad')
+                navigate('/admin/dashboard')
                 // setValues(initialValues)
                 // setImages([])
             }
@@ -401,7 +417,7 @@ const login = async (values) => {
 
     }
 
-  const addCartItem = async ( item ) => {
+  const addCartItem = async ( item , id) => {
         let cart = []
             if (localStorage.getItem('cart')) {
                 cart = JSON.parse(localStorage.getItem('cart'))
@@ -410,6 +426,7 @@ const login = async (values) => {
             if(!cart.find(element => element._id === item._id) ){
                 Toast.fire({ icon: 'success' , title: 'Cart Added Successfully'});
                 cart.push(item)
+
             }else{
                 Toast.fire({ icon: 'error' , title: 'Cart is Already Added'});
             }
@@ -421,6 +438,39 @@ const login = async (values) => {
                     payload : cart
                 })
             }
+    }
+    const removeProduct = async ( productId) => {
+        let cart = []
+        let showRemoveCartButton , showAddToCart;
+            if (localStorage.getItem('cart')) {
+                cart = JSON.parse(localStorage.getItem('cart'))
+            }
+            cart.map((value, key) => {
+                if (value._id === productId) {
+                    cart.splice(key, 1)
+                }
+                Toast.fire({ icon: 'success' , title: 'Cart Removed Successfully'});
+                showRemoveCartButton = false
+                showAddToCart = true
+                localStorage.setItem('cart', JSON.stringify(cart))
+            })
+            // if(!cart.find(element => element._id === item._id) ){
+            //     Toast.fire({ icon: 'success' , title: 'Cart Removed Successfully'});
+            //     showRemoveCartButton = false;
+            //     cart.pop(item)
+            // }
+            // else{
+            //     Toast.fire({ icon: 'error' , title: 'Cart is Already Added'});
+            // }
+    
+             localStorage.setItem("cart", JSON.stringify(cart));
+             if (cart) {
+                dispatch({
+                    type: REMOVE_PRODUCT,
+                    payload : cart
+                })
+            }
+            totalCartFunc()
     }
  const removeCartItem = async (productId) => {
         let cart = []
@@ -467,7 +517,7 @@ const totalCartFunc = async () => {
         if (localStorage.getItem('cart')) {
             let cart = JSON.parse(localStorage.getItem('cart'))
             // let cartLength = cart.length
-            console.log("cart.length=======>",cart);
+            console.log("cart.length=>",cart);
             if (cart.length > 0) {
                 dispatch({
                     type: TOTAL_ITEM,
@@ -514,6 +564,23 @@ const updateCartFunc = async (productId, quantity) => {
         setAdd(remove)
         updateCartFunc(id , remove)
     }
+    const Udetails = async () => {
+        try {
+            const res = await request('get', `/orders/by/user/`, {}, true, true)
+            if(res.data.length){
+                console.log("res", res)
+                dispatch({
+                    type: DETAILS,
+                    payload: res.data,
+                })
+        //    Toast.fire({ icon: 'success',title: 'Success!!!', position: 'top-end' })
+            }else{
+            //  Toast.fire({ icon: 'error',title: 'something went wrong!!!', position: 'top-end' })
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    } 
  return (
      <AuthContext.Provider value={{
          test : "test",
@@ -540,6 +607,9 @@ const updateCartFunc = async (productId, quantity) => {
          getItem : state.getItem,
          totalItem : state.totalItem,
          updateItem : state.updateItem,
+         showAddToCart : state.showAddToCart,
+         showRemoveCartButton : state.showRemoveCartButton,
+         details : state.details,
          register,
          login,
          signout,
@@ -564,7 +634,9 @@ const updateCartFunc = async (productId, quantity) => {
          totalCartFunc,
          updateCartFunc,
          handleAdd,
-         handleRemove
+         handleRemove,
+         removeProduct,
+         Udetails
      }}>
          {props.children}
      </AuthContext.Provider>

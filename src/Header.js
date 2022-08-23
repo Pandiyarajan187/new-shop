@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { Link, useNavigate, useLocation ,useParams } from 'react-router-dom'
 import { isAuthenticated } from '../src/utils/Auth'
 import { Toast } from './Notify'
 import authContext from './context/authContext'
@@ -8,14 +8,12 @@ import authContext from './context/authContext'
 function Header() {
   let navigate = useNavigate()
   let location = useLocation()
-  const { user, token, userDashboard, signout ,totalItem ,totalCartFunc} = useContext(authContext)
+  const params = useParams()
+  const { user, token, userDashboard, signout ,totalItem ,totalCartFunc ,getUserCategory,getUserDetails} = useContext(authContext)
   // const {user} = user
 
-  useEffect(() => {
-    userDashboard()
-  }, [])
-
-
+console.log(getUserDetails);
+var cart = JSON.parse(localStorage.getItem('cart'))
 
   const isActive = (location, path) => {
     if (location.pathname === path) {
@@ -29,14 +27,14 @@ function Header() {
       <>
         <ul className="navbar navbar-dark bg-primary">
           {/* <li className="nav-item"> */}
-          {!user ?
+          {/* {!user ?
             <>
               <li class="nav-item">
                 <Link to="/" class="nav-link" style={isActive(location, '/')}>
                   <i class="material-icons">home</i> Home
                 </Link>
               </li>
-            </> : null}
+            </> : null} */}
 
 
           {user && user?.role === 1 ?
@@ -55,9 +53,9 @@ function Header() {
                     Dashboard
                   </button>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                    <Link to="/profile" class="dropdown-item" type="button">Profile</Link>
+                    <Link to= '/profile' class="dropdown-item" type="button">Profile</Link>
                     <Link to="/shop" class="dropdown-item" type="button">Shop</Link>
-                    <Link to="" class="dropdown-item" type="button" onClick={signout}>Logout</Link>
+                    <Link to="/SignIn" class="dropdown-item" type="button" onClick={signout}>Logout</Link>
                   </div>
                 </div>
               </li>
@@ -74,7 +72,7 @@ function Header() {
               <li class="button-container nav-item iframe-extern">
                 <Link to="/cart" class="btn  btn-primary btn-sm  text-white btn-round btn-block">
                   <i class="material-icons">shopping_cart</i> Cart
-                  <span  style={{ paddingLeft: '10px' }}>{totalItem?.length === 0 ? '' : totalItem?.length }</span>
+                  <span  style={{ paddingLeft: '10px' }}>{ cart && totalItem?.length === 0 ? '' : cart && totalItem?.length }</span>
                 </Link>
               </li>
 
@@ -104,7 +102,7 @@ function Header() {
                     </Link>
                   </li> */}
               <li class="nav-item">
-                <Link to="" class="nav-link " onClick={signout}>
+                <Link to="/SignIn" class="nav-link " onClick={signout}>
                   Sign Out
                 </Link>
               </li>
@@ -125,6 +123,7 @@ function Header() {
           }
         </ul>
       </>
+      {/* {console.log(getUserDetails)} */}
     </div>
 
   )

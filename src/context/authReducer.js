@@ -18,18 +18,22 @@ import {
      REMOVE_ITEM,
      GET_ITEM,
      TOTAL_ITEM,
-     UPDATE_ITEM
+     UPDATE_ITEM,
+     REMOVE_PRODUCT,
+     DETAILS
     } from "./authTypes";
 
 export default (state, action) => {
     switch (action.type) {
         case LOGIN : 
         return {
+            ...state,
             token : action.payload.token,
             user : action.payload.user,
         }
         case LOGOUT : 
         return {
+            ...state,
             token : action.payload.token,
             user : action.payload.user,
         }
@@ -109,12 +113,21 @@ export default (state, action) => {
         case ADD_ITEM : 
         return {
             ...state,
+            // showAddToCart : false,
+            // showRemoveCartButton : true,
             addItem : action.payload
         }
         case REMOVE_ITEM : 
         return {
             ...state,
             removeItem : action.payload
+        }
+        case REMOVE_PRODUCT : 
+        return {
+            ...state,
+            // showRemoveCartButton : false,
+            showAddToCart : true,
+            removeProduct : action.payload
         }
         case GET_ITEM : 
         return {
@@ -130,6 +143,11 @@ export default (state, action) => {
         return {
             ...state,
             updateItem : action.payload
+        }
+        case DETAILS : 
+        return {
+            ...state,
+            details : action.payload
         }
         default : 
         return state;

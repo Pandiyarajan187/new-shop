@@ -13,7 +13,7 @@ const Home = () => {
         getProductsBySell, 
         getProductsForSell, 
         getProductsByArrival, 
-        getProductsForArrival , 
+        getProductsForArrival, 
         totalCartFunc
     } = useContext(authContext)
 
@@ -27,7 +27,7 @@ const Home = () => {
             <Search />
             <h1>Best Sold</h1>
             <div className="row">
-                {getProductsForSell.map((value, key) => {
+                {getProductsForSell?.map((value, key) => {
                     return <div className='col-md-3 pb-5' key={key}>
                       <Card  product={value}/></div>
                 })}
@@ -35,7 +35,7 @@ const Home = () => {
             <hr />
             <h1>New Arrival</h1>
             <div className="row">
-                {getProductsForArrival.map((value, key) => {
+                {getProductsForArrival?.map((value, key) => {
                     return <div className="col-md-3 pb-5" key={key}>
                       <Card  product={value}/></div> 
                 })}

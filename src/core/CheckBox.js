@@ -3,6 +3,7 @@ import React,{ useContext, useEffect, useState } from 'react'
 const CheckBox = ({ categories, handleFilter  , reset, trigger}) => {
 
     const [checked, setChecked] = useState([])
+    const [initial, setInitial] = useState(true)
     const handleChange = category => () => {
         const currentCategoryId = checked.indexOf(category) //Return the first index or -1
         //  console.log("currentCategoryId",category);
@@ -27,11 +28,13 @@ const CheckBox = ({ categories, handleFilter  , reset, trigger}) => {
     }
 
     useEffect(() => {
-        if(trigger){
+        if(!initial){
             setChecked([])
             handleFilter([])
-        }
-        console.log(trigger)
+            console.log('trigger', trigger)
+        } else {
+            setInitial(false)
+        }  
     },[trigger])
     return (
         categories.map((value, key) => {

@@ -6,36 +6,41 @@
 // import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 // import Typography from "@material-ui/core/Typography";
 // import { useTheme } from '@material-ui/core/styles'
-// import {KeyboardArrowLeft} from "@material-ui/icons/KeyboardArrowLeft";
- 
+// import { KeyboardArrowLeft } from "@material-ui/icons/KeyboardArrowLeft";
+// import Footer from "./Footer";
+
 // const MyCollection = [
 //   {
 //     imgPath:
-// "https://cdn.shopify.com/s/files/1/0057/8938/4802/files/2_a25aff7a-b5c4-4565-a111-6e1ce2d5b5f0.png",
+//       "https://cdn.shopify.com/s/files/1/0057/8938/4802/files/2_a25aff7a-b5c4-4565-a111-6e1ce2d5b5f0.png",
 //   },
 //   {
 //     imgPath:
-// "http://www.mouawad.com/images/home/og.jpg",
+//       "http://www.mouawad.com/images/home/og.jpg",
 //   },
 //   {
 //     imgPath:
-// "https://www.android.com/static/2016/img/one/carousel/xiaomi_phones_a3-global_1x.png",
+//       "https://www.android.com/static/2016/img/one/carousel/xiaomi_phones_a3-global_1x.png",
 //   },
 // ];
- 
+
 // const Welcome = () => {
 //   const CollectionSize = MyCollection.length;
-//   // const theme = useTheme();
+//   const theme = useTheme();
 //   const [index, setActiveStep] = React.useState(0);
- 
+
 //   const goToNextPicture = () => {
 //     setActiveStep((prevActiveStep) => prevActiveStep + 1);
 //   };
- 
+  
+//   const goToPrevPicture = () => {
+//     setActiveStep((prevActiveStep) => prevActiveStep - 1);
+//   };
+
 //   return (
 //     <div
 //       style={{
-//         marginLeft: "40%",
+//         marginLeft: "30%",
 //       }}
 //     >
 //       <h2>shopping Cart</h2>
@@ -51,8 +56,8 @@
 //           style={{
 //             height: 50,
 //             display: "flex",
-//             // paddingLeft: theme.spacing(4),
-//             // backgroundColor: theme.palette.background.default,
+//             paddingLeft: theme.spacing(4),
+//             backgroundColor: theme.palette.background.default,
 //             alignItems: "center",
 //           }}
 //         >
@@ -62,8 +67,8 @@
 //           src={MyCollection[index].imgPath}
 //           style={{
 //             height: 255,
-//             width: "100%",
-//             maxWidth: 400,
+//             width: "200%",
+//             maxWidth: 600,
 //             display: "block",
 //             overflow: "hidden",
 //           }}
@@ -74,6 +79,20 @@
 //           position="static"
 //           index={index}
 //           steps={CollectionSize}
+//           prevButton={
+//             <Button
+//               size="small"
+//               onClick={goToPrevPicture}
+//               disabled={index === CollectionSize - 1}
+//             >
+//               Prev
+//               {theme.direction === "rtl" ? (
+//                 <KeyboardArrowLeft />
+//               ) : (
+//                 <KeyboardArrowRight />
+//               )}
+//             </Button>
+//           }
 //           nextButton={
 //             <Button
 //               size="small"
@@ -81,26 +100,29 @@
 //               disabled={index === CollectionSize - 1}
 //             >
 //               Next
-//               {/* {theme.direction !== "rtl" ? (
+//               {theme.direction !== "rtl" ? (
 //                 <KeyboardArrowRight />
 //               ) : (
 //                 <KeyboardArrowLeft />
-//               )} */}
+//               )}
 //             </Button>
 //           }
 //         />
-//       </div>
-//     </div>
+ // </div>
+ //     <Footer />
+ ///   </div>
 //   );
 // };
- 
+
 // export default Welcome;
 
 import React from 'react'
 
 function Welcomepage() {
   return (
-    <div>Welcomepage</div>
+    <div className='App'>
+      <h2>Home Page</h2>
+      </div>
   )
 }
 
@@ -125,7 +147,7 @@ export default Welcomepage
 //     const nextSlide = () => {
 //         if(slideIndex !== dataSlider.length){
 //             setSlideIndex(slideIndex + 1)
-//         } 
+//         }
 //         else if (slideIndex === dataSlider.length){
 //             setSlideIndex(1)
 //         }
@@ -152,8 +174,8 @@ export default Welcomepage
 //                     key={obj.id}
 //                     className={slideIndex === index + 1 ? "slide active-anim" : "slide"}
 //                     >
-//                         <img 
-//                         src={process.env.PUBLIC_URL + `/Imgs/img${index + 1}.jpg`} 
+//                         <img
+//                         src={process.env.PUBLIC_URL + `/Imgs/img${index + 1}.jpg`}
 //                         />
 //                     </div>
 //                 )
@@ -163,7 +185,7 @@ export default Welcomepage
 
 //             <div className="container-dots">
 //                 {Array.from({length: 5}).map((item, index) => (
-//                     <div 
+//                     <div
 //                     onClick={() => moveDot(index + 1)}
 //                     className={slideIndex === index + 1 ? "dot active" : "dot"}
 //                     ></div>

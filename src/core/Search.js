@@ -5,6 +5,7 @@ import qs from 'query-string'
 import Card from "../core/Card";
 import authContext from '../context/authContext';
 const Search = () => {
+    const [initial, setInitial] = useState(true)
     const [data, setData] = useState({
         categories: [],
         category: 'All',
@@ -27,11 +28,14 @@ const Search = () => {
     // }
     useEffect(() => {
         getBuyerCategory()
-        // eslint-disable-next-line
     }, [])
 
     useEffect(()=> {
-        setData({ ...data, results: submitSearch , searched : true})
+        if(!initial){
+            setData({ ...data, results: submitSearch , searched : true })
+        }else {
+            setInitial(false)
+        }
         // console.log(submitSearch);
     },[submitSearch]) 
   
@@ -52,7 +56,7 @@ const Search = () => {
         if (searched && results.length > 0) {
             return `Found ${results.length} Products`
         }
-        if (searched  && results.length < 1) {
+        if (searched && results && results.length < 1) {
             return `No Products Found!`
         }
     }
@@ -75,7 +79,7 @@ const Search = () => {
                         <label for="exampleFormControlSelect1">Pick Category</label>
                         <select class="form-control " data-style="btn btn-link" id="exampleFormControlSelect1" name="category" onChange={handleChange}>
                             <option value="">All</option>
-                            {categories.map((value, key) => <option key={key} value={value._id}>{value.name}</option>)}
+                            {categories?.map((value, key) => <option key={key} value={value._id}>{value.name}</option>)}
                         </select>
                     </div>
                 </div>

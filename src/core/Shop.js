@@ -33,7 +33,7 @@ const Shop = () => {
             }
             const res = await request('post', '/products/search', data)
             if (res) {
-                // console.log('SERACH RESPONE' , res);
+                console.log('SERACH data' , data);
                 setFilteredResults(res.data.data)
             }
         } catch (error) {
@@ -76,19 +76,17 @@ const Shop = () => {
     }
     const reset = () => {
         console.log('jhgvvvvvvvvvvvvvvvvvvvv')
-    //     setMyFilters({
-    //     filters: { category: [], price: [] }
-    // })
-    for (const checkbox of document.querySelectorAll('.check')) {
-        //iterating over all matched elements
-        checkbox.checked = false //for selection
+        for (const checkbox of document.querySelectorAll('.check')) {
+        checkbox.checked = false 
+        // setMyFilters({
+        //     filters: { category: [], price: [] }
+        // })
         }
         for (const setvalue of document.querySelectorAll('.set')) {
-            //iterating over all matched elements
-            setvalue.checked = false //for selection
-            }
-    setTrigger(true)
-    loadFilterResults()
+            setvalue.checked = false 
+        }
+    setTrigger(!trigger)
+    loadFilterResults(myFilters)
 }
     return (
         <div class="container">
@@ -157,4 +155,3 @@ const Shop = () => {
 }
 
 export default Shop
-//6.28

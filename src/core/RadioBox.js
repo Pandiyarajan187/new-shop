@@ -3,17 +3,21 @@ import React,{ useState , useEffect } from 'react'
 const RadioBox = ({ prices, handleFilter , trigger }) => {
     // eslint-disable-next-line
     const [value, setValue] = useState(0)
+    const [initial, setInitial] = useState(true)
+
     const handleChange = (e) => {
         handleFilter(e.target.value)
         // console.log(e.target.value);
         setValue(e.target.value)
     }
     useEffect(() => {
-        if(trigger){
+        if(!initial){
             setValue(0)
-            handleFilter(0)
+            handleFilter([])
+            console.log('trigger', trigger)
+        } else {
+            setInitial(false)
         }
-        console.log(trigger)
     },[trigger])
     return (
         <div>

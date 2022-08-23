@@ -27,6 +27,8 @@ const Cart = () => {
     //     console.log("-----------", remove);
     // }
     console.log(totalItem,'++++++++++++++')
+    var cart = JSON.parse(localStorage.getItem('cart'))
+
     const showItems = (items) => {
         return (
 
@@ -35,7 +37,7 @@ const Cart = () => {
                     <div class="container">
                         <div class="row">
                             <div class="col-md-8 ml-auto mr-auto text-center">
-                                <h2 class="title">Your Cart Has {totalItem.length} Items</h2>
+                                <h2 class="title">Your Cart Has {cart && totalItem?.length} Items</h2>
                             </div>
                         </div>
                     </div>
@@ -117,7 +119,7 @@ const Cart = () => {
     }, [])
     return (
         <div>
-            {totalItem?.length > 0 ? showItems(getItem) : noItemMessage()}
+            {cart && totalItem?.length > 0 ? showItems(getItem) : noItemMessage()}
             {/* {console.log("totalItem.length ",totalItem.length )} */}
             <div>
         
