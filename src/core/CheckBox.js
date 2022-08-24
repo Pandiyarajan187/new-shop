@@ -19,8 +19,7 @@ const CheckBox = ({ categories, handleFilter  , reset, trigger}) => {
            console.log(newCheckedCategoryId, "newCheckedCategoryId");
        } else {
            newCheckedCategoryId.splice(currentCategoryId, 1)
-           console.log(newCheckedCategoryId, "newCheckedCategoryId");
-
+           console.log(newCheckedCategoryId, "newCheckedCategoryId")
        }
     //   console.log(newCheckedCategoryId);
        setChecked(newCheckedCategoryId)

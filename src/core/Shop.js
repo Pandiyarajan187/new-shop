@@ -140,14 +140,10 @@ const Shop = () => {
                 </div>
                 <div class="col-md-10">
                     <div class="row">
-                        {filteredResults.map((value, key) => {
+                        {filteredResults.length > 0 ? filteredResults.map((value, key) => {
                             return <div  className="col-md-4 pb-5" key={key}><Card  product={value}/></div>
-                        })}
+                        }) : <h2 style={{paddingLeft : '340px'}} class="section-title">No Product Found</h2>}
                     </div>
-                    <hr />
-                    {/* <div className="text-center">
-                        {loadMoreButton()}
-                    </div> */}
                 </div>
             </div>
         </div>
