@@ -41,6 +41,7 @@ const AuthState = (props) => {
     const params = useParams()
     const [values, setValues] = useState()
     const [add, setAdd] = useState(null)
+    const [price, setPrice] = useState(null)
     const [remove, setRemove] = useState(null)
     const { user, token} = isAuthenticated()
     const initialState = {
@@ -535,13 +536,14 @@ const totalCartFunc = async () => {
 
 }
 }
-const updateCartFunc = async (productId, quantity) => {
+const updateCartFunc = async (productId, quantity , price) => {
     let cart = []
     cart = JSON.parse(localStorage.getItem('cart'))
     if(cart){
         for(let value of cart){
             if(value._id === productId){
              value.quantity = quantity;
+             value.price = price;
             }
          }
          localStorage.setItem("cart", JSON.stringify(cart));
@@ -554,15 +556,36 @@ const updateCartFunc = async (productId, quantity) => {
 
  // Update Quantity 
  }
-     const handleAdd = async (id , quantity) => {
-         var add = quantity + 1
+     const handleAdd = async (id , quantity , price) => {
+        let cart = []
+        cart = JSON.parse(localStorage.getItem('cart'))
+        if(cart){
+            for(let value of cart){
+        if(value._id === id){
+            var add = quantity + 1
+            // var price = price + price
+           } 
+        }}
         setAdd(add)
-        updateCartFunc(id , add)
+    //    setPrice(price)
+        updateCartFunc(id , add , price)
     }
-    const handleRemove = async (id , quantity) => {
-        var remove = quantity - 1
+    const handleRemove = async (id , quantity , price) => {
+        let cart = []
+        cart = JSON.parse(localStorage.getItem('cart'))
+        console.log("%$%$%$%$%$%$");
+        if(cart){
+            for(let value of cart){
+        if(value._id === id){
+            if(value.quantity === 0)
+            var remove = 1
+            // var price = price + price
+           } else
+           var remove = quantity - 1
+        }}
         setAdd(remove)
-        updateCartFunc(id , remove)
+        // setPrice(price)
+        updateCartFunc(id , remove , price) 
     }
     const Udetails = async () => {
         try {

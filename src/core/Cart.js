@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { useState, useEffect } from 'react'
-import { updateItem  } from '../utils/CartHelpers'
+import { updateItem } from '../utils/CartHelpers'
 import Card from './Card'
 import { Link } from 'react-router-dom'
 import Checkout from './Checkout'
@@ -9,7 +9,7 @@ import authContext from '../context/authContext'
 
 
 const Cart = () => {
-    const {removeCartItem , getCartItem , getItem , totalCartFunc , totalItem , updateItem , updateCartFunc , handleAdd ,handleRemove} = useContext(authContext)
+    const { removeCartItem, getCartItem, getItem, totalCartFunc, totalItem, updateItem, updateCartFunc, handleAdd, handleRemove } = useContext(authContext)
     const [add, setAdd] = useState(null)
     const [remove, setRemove] = useState(null)
     const [items, setItems] = useState([])
@@ -26,9 +26,12 @@ const Cart = () => {
     //     updateCartFunc(id , remove)
     //     console.log("-----------", remove);
     // }
-    console.log(totalItem,'++++++++++++++')
-    var cart = JSON.parse(localStorage.getItem('cart'))
+    // var data  = JSON.stringify(localStorage.getItem('cart'));
+    // var total = data.reduce((total, item) => total + item.price ,0)
 
+    console.log(totalItem, '++++++++++++++')
+    var cart = JSON.parse(localStorage.getItem('cart'))
+    var val;
     const showItems = (items) => {
         return (
 
@@ -57,6 +60,7 @@ const Cart = () => {
                                                 <th class="text-right">Description</th>
                                                 <th class="text-right">Qty</th>
                                                 <th class="text-right">Amount</th>
+                                                <th class="text-right">Total</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
@@ -67,22 +71,42 @@ const Cart = () => {
                                                     <td class="td-name">{value.name}</td>
                                                     <td class="td-number text-right">{value.description}</td>
                                                     <td class="td-number">{value.quantity}</td>
-                                                    <td class="td-number">RS. {value.price}</td>
+                                                    <td class="td-number">{value.price}</td>
+                                                    <td class="td-number">RS. {value.quantity * value.price }</td>
                                                     <td class="td-number">
                                                         <div class="btn-group btn-group-sm">
-                                                            <button className="btn btn-primary btn-block mb-2"> <i class="material-icons" onClick={()=>{handleRemove(value._id , value.quantity)}}>remove</i> </button>
-                                                            <button className="btn btn-primary btn-block mb-2"> <i class="material-icons" onClick={()=>{handleAdd(value._id , value.quantity)}} >add</i> </button>
+                                                         <button className="btn btn-primary btn-block mb-2"> <i class="material-icons" 
+                                                            onClick={
+                                                                () => { handleRemove(value._id, value.quantity, value.price)
+                                                                }
+                                                                }
+                                                                >remove</i>
+                                                             </button>
+                                                            <button className="btn btn-primary btn-block mb-2"> <i class="material-icons" onClick={() => { handleAdd(value._id, value.quantity , value.price) }} >add</i> </button>
                                                         </div>
                                                     </td>
                                                     <td>
-                                                    <div class="img-container">
-                                                       <button style={{width : '60%'}} className="btn btn-primary btn-block mb-2" onClick={()=>{removeCartItem(value._id)}}>Delete</button>
-                                                    </div>
-                                                </td>
+                                                        <div class="img-container">
+                                                            <button style={{ width: '60%' }} className="btn btn-primary btn-block mb-2" onClick={() => { removeCartItem(value._id) }}>Delete</button>
+                                                        </div>
+                                                    </td>
                                                 </tr>
                                             ))}
 
-                                            
+                                            <tr>
+                                                <td colspan="3"></td>
+                                                <td class="td-total">
+                                                    Total Price
+                                                </td>
+                                                <td colspan="1" class="td-price">
+                                        <td class="td-number">RS. {items.reduce((total, item) => total + (item.price * item.quantity), 0)}</td>
+                                                </td>
+                                                <td colspan="1"></td>
+                                                <td colspan="2" class="text-right">
+                                                    <Link to='/checkout'>
+                                            <button type="button" class="btn btn-primary btn-round">Complete Purchase <i class="material-icons">keyboard_arrow_right</i></button></Link>
+                                        </td>
+                                            </tr>
                                             {/*<tr>
                     <td colspan="6"></td>
                     <td colspan="2" class="text-right">
@@ -90,6 +114,8 @@ const Cart = () => {
                     </td>
                                   </tr> */}
                                         </tbody>
+
+                                        {/* <div  class="td-number">RS. {items.reduce((total , item)=>total+ (item.price) ,0)}</div> */}
                                     </table>
                                 </div>
                             </div>
@@ -108,7 +134,7 @@ const Cart = () => {
             <h2>Your cart is empty</h2>
             <br />
             <button className="btn btn-primary">
-            <Link  style={{color : 'white'}} to="/shop">Continue Shopping</Link>
+                <Link style={{ color: 'white' }} to="/shop">Continue Shopping</Link>
             </button>
         </div>
     )
@@ -122,16 +148,16 @@ const Cart = () => {
             {cart && totalItem?.length > 0 ? showItems(getItem) : noItemMessage()}
             {/* {console.log("totalItem.length ",totalItem.length )} */}
             <div>
-        
-            <div className="row">
-                <div className="col-md-6">
-                    
-                </div>
-                {/* <div className="col-md-6">
+
+                <div className="row">
+                    <div className="col-md-6">
+
+                    </div>
+                    {/* <div className="col-md-6">
                     <Checkout product={items}/>
                 </div> */}
+                </div>
             </div>
-        </div>
         </div>
 
     )

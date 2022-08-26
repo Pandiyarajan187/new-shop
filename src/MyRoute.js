@@ -22,6 +22,7 @@ import Shop from './core/Shop';
 import Search from './core/Search';
 import Welcomepage from './Welcomepage';
 import UserProfile from './user/userProfile';
+import Checkout from './core/Checkout';
 
 function MyRoute() {
  const {user , allProducts } = useContext(authContext)
@@ -43,6 +44,7 @@ function MyRoute() {
                         <Route path='/cart' element={<Cart />} />
                         <Route path='/shop' element={<Shop />} />
                         <Route path='/profile' element={<UserProfile />} />
+                        <Route path='/checkout' element={<Checkout />} />
                     </Route>
 
                     <Route exact element={<AdminRoute />}>
