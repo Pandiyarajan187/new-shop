@@ -23,6 +23,8 @@ import Search from './core/Search';
 import Welcomepage from './Welcomepage';
 import UserProfile from './user/userProfile';
 import Checkout from './core/Checkout';
+import Success from './core/Success';
+import Cancel from './core/Cancel';
 
 function MyRoute() {
  const {user , allProducts } = useContext(authContext)
@@ -45,6 +47,8 @@ function MyRoute() {
                         <Route path='/shop' element={<Shop />} />
                         <Route path='/profile' element={<UserProfile />} />
                         <Route path='/checkout' element={<Checkout />} />
+                        <Route path="/success" element={<Success />} />
+                        <Route path="/cancel" element={<Cancel />} />
                     </Route>
 
                     <Route exact element={<AdminRoute />}>

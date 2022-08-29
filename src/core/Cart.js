@@ -75,14 +75,8 @@ const Cart = () => {
                                                     <td class="td-number">RS. {value.quantity * value.price }</td>
                                                     <td class="td-number">
                                                         <div class="btn-group btn-group-sm">
-                                                         <button className="btn btn-primary btn-block mb-2"> <i class="material-icons" 
-                                                            onClick={
-                                                                () => { handleRemove(value._id, value.quantity, value.price)
-                                                                }
-                                                                }
-                                                                >remove</i>
-                                                             </button>
-                                                            <button className="btn btn-primary btn-block mb-2"> <i class="material-icons" onClick={() => { handleAdd(value._id, value.quantity , value.price) }} >add</i> </button>
+                                                        <button className="btn btn-primary btn-block mb-2"> <i class="material-icons" onClick={()=>{handleRemove(value._id , value.quantity)}}>remove</i> </button>
+                                                            <button className="btn btn-primary btn-block mb-2"> <i class="material-icons" onClick={()=>{handleAdd(value._id , value.quantity)}} >add</i> </button>
                                                         </div>
                                                     </td>
                                                     <td>

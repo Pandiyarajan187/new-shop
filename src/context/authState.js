@@ -536,14 +536,13 @@ const totalCartFunc = async () => {
 
 }
 }
-const updateCartFunc = async (productId, quantity , price) => {
+const updateCartFunc = async (productId, quantity) => {
     let cart = []
     cart = JSON.parse(localStorage.getItem('cart'))
     if(cart){
         for(let value of cart){
             if(value._id === productId){
              value.quantity = quantity;
-             value.price = price;
             }
          }
          localStorage.setItem("cart", JSON.stringify(cart));
@@ -556,37 +555,16 @@ const updateCartFunc = async (productId, quantity , price) => {
 
  // Update Quantity 
  }
-     const handleAdd = async (id , quantity , price) => {
-        let cart = []
-        cart = JSON.parse(localStorage.getItem('cart'))
-        if(cart){
-            for(let value of cart){
-        if(value._id === id){
-            var add = quantity + 1
-            // var price = price + price
-           } 
-        }}
-        setAdd(add)
-    //    setPrice(price)
-        updateCartFunc(id , add , price)
-    }
-    const handleRemove = async (id , quantity , price) => {
-        let cart = []
-        cart = JSON.parse(localStorage.getItem('cart'))
-        console.log("%$%$%$%$%$%$");
-        if(cart){
-            for(let value of cart){
-        if(value._id === id){
-            if(value.quantity === 0)
-            var remove = 1
-            // var price = price + price
-           } else
-           var remove = quantity - 1
-        }}
-        setAdd(remove)
-        // setPrice(price)
-        updateCartFunc(id , remove , price) 
-    }
+ const handleAdd = async (id , quantity) => {
+    var add = quantity + 1
+   setAdd(add)
+   updateCartFunc(id , add)
+}
+const handleRemove = async (id , quantity) => {
+   var remove = quantity - 1
+   setAdd(remove)
+   updateCartFunc(id , remove)
+}
     const Udetails = async () => {
         try {
             const res = await request('get', `/orders/by/user/`, {}, true, true)
