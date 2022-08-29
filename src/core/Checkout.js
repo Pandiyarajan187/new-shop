@@ -4,10 +4,11 @@ import { loadStripe } from "@stripe/stripe-js";
 
 
 
-const stripePromise = loadStripe();
+let stripePromise;
 const getStripe = () => {
   if (!stripePromise) {
-    stripePromise = loadStripe(process.env.REACT_APP_STRIPE_KEY);
+    stripePromise = loadStripe('pk_test_51Lc7B5LlkUjkLL5ybliEWTsgozQfozu1bQszv5TnsmgPxVlZWNDwuLlh6hwayzuQ7ugMdgAVuRLDQ9reGkvvGVba00DWLjKDtJ')
+    // (process.env.REACT_APP_STRIPE_KEY);
   }
 
   return stripePromise;
@@ -17,7 +18,7 @@ const Checkout = () => {
   const [stripeError, setStripeError] = useState(null);
   const [isLoading, setLoading] = useState(false);
   const item = {
-    price: "price_1K3TfMA4B8Maa00LFZ4EFwdX",
+    price: "price_1Lc7CoLlkUjkLL5yp67iCDVo",
     quantity: 1
   };
 
