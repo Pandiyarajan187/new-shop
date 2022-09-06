@@ -1,27 +1,34 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
+import authContext from "../context/authContext";
 
 
 
 let stripePromise;
+let cart = JSON.stringify(localStorage.getItem('cart'))
 const getStripe = () => {
-  if (!stripePromise) {
-    stripePromise = loadStripe('pk_test_51Lc7B5LlkUjkLL5ybliEWTsgozQfozu1bQszv5TnsmgPxVlZWNDwuLlh6hwayzuQ7ugMdgAVuRLDQ9reGkvvGVba00DWLjKDtJ')
-    // (process.env.REACT_APP_STRIPE_KEY);
-  }
-
-  return stripePromise;
+    if (!stripePromise) {
+        stripePromise = loadStripe('pk_test_51Lc7B5LlkUjkLL5ybliEWTsgozQfozu1bQszv5TnsmgPxVlZWNDwuLlh6hwayzuQ7ugMdgAVuRLDQ9reGkvvGVba00DWLjKDtJ')
+        // (process.env.REACT_APP_STRIPE_KEY);
+    }
+    
+    return stripePromise;
 };
 
+
 const Checkout = () => {
+    const { getItem ,getCartItem } = useContext(authContext)
   const [stripeError, setStripeError] = useState(null);
   const [isLoading, setLoading] = useState(false);
   const item = {
     price: "price_1Lc7CoLlkUjkLL5yp67iCDVo",
     quantity: 1
   };
-
+  useEffect(()=>{
+    getCartItem()
+    },[])
+    
   const checkoutOptions = {
     lineItems: [item],
     mode: "payment",
@@ -46,12 +53,9 @@ const Checkout = () => {
   return (
     <div className="checkout">
       <h1>Stripe Checkout</h1>
-      <p className="checkout-title">Design+Code React Hooks Course</p>
-      <p className="checkout-description">
-        Learn how to build a website with React Hooks
-      </p>
-      <h1 className="checkout-price">$19</h1>
-      <button
+      <h1 className="checkout-price">Rs. {getItem.reduce((total, item) => total + (item.price * item.quantity), 0)}</h1>
+      {console.log(getItem)}
+      <button 
         className="checkout-button"
         onClick={redirectToCheckout}
         disabled={isLoading}
@@ -62,7 +66,9 @@ const Checkout = () => {
           </div>
         </div>
         <div className="text-container">
-          <p className="text">{isLoading ? "Loading..." : "Buy"}</p>
+            <button   className="btn btn-primary">
+          <p>{isLoading ? "Loading..." : "Buy"}</p>
+            </button>
         </div>
       </button>
     </div>
@@ -70,4 +76,3 @@ const Checkout = () => {
 };
 
 export default Checkout;
-//REACT_APP_STRIPE_KEY="pk_test_51LaziwSHlNeSK1y2ESbOrqiUemnTfuVR8PwpI2Uct8HkxF2FToQks9i6nrej8H5NdRCR2aMhxvOBO2Sl6RinBcxb00BKG49Df3"

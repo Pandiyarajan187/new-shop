@@ -2,7 +2,7 @@ import React from 'react'
 
 function Cancel() {
   return (
-    <div>Cancel</div>
+    <div>Payment Failed</div>
   )
 }
 
