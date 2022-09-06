@@ -120,6 +120,9 @@ const Invoice = ({ removeCartItem, totalItem }) => {
           </table>
         </Col>
       </Row>
+      <button className="btn btn-primary" onClick={()=>window.print()}>
+        Print Invoice
+      </button>
     </div>
 
   );

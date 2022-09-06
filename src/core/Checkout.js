@@ -65,7 +65,7 @@ const Checkout = () => {
             {/* <img className="icon" src={CardIcon} alt="credit-card-icon" /> */}
           </div>
         </div>
-        <div className="text-container">
+        <div>
             <button   className="btn btn-primary">
           <p>{isLoading ? "Loading..." : "Buy"}</p>
             </button>
