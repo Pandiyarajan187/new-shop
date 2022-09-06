@@ -153,7 +153,8 @@ const Cart = () => {
                 </div> */}
                 </div>
             </div>
-            <Invoice   removeCartItem= {removeCartItem}
+            <Invoice   
+             removeCartItem= {removeCartItem}
              getCartItem= {getCartItem}
              getItem= {getItem}
              totalCartFunc= {totalCartFunc}

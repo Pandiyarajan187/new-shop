@@ -1,4 +1,4 @@
-import React, { useContext ,useState , useEffect} from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { render } from "react-dom";
 import { Link } from "react-router-dom";
 import { Col, Divider, Row, Table } from 'antd';
@@ -7,11 +7,18 @@ import authContext from "../context/authContext";
 import moment from "moment";
 import Cart from "./Cart";
 
-const Invoice = ({removeCartItem, getCartItem, getItem, totalCartFunc, totalItem}) => {
-    const {user} = useContext(authContext)
-    const date = new Date()
-    const tomorrow  = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
+const Invoice = ({ removeCartItem, totalItem }) => {
+  const { user, getCartItem, getItem, totalCartFunc } = useContext(authContext)
+  const [items, setItems] = useState()
+  const date = new Date()
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  useEffect(() => {
+    getCartItem()
+    totalCartFunc()
+    setItems(getItem)
+  }, [])
 
   return (
     <div style={{ padding: 20 }}>
@@ -46,23 +53,23 @@ const Invoice = ({removeCartItem, getCartItem, getItem, totalCartFunc, totalItem
           </table>
         </Col>
       </Row>
-
+{/* 
       <Row style={{ marginTop: 48 }}>
         <div>Bill To: <strong>Strides Shasun Ltd</strong></div>
         <div>Bannerghatt Road,</div>
         <div>Bangalore - 560076</div>
-      </Row>
+      </Row> */}
 
 
-      <Row style={{ marginTop: 48 }}>
+      {/* <Row style={{ marginTop: 48 }}>
         <Table dataSource={[{
-            id: 1,
-            name: 'Accommodation (Single Occupancy)',
-            description: 'Accommodation',
-            price: 1599,
-            quantity: 1
+          id: 1,
+          name: 'Accommodation (Single Occupancy)',
+          description: 'Accommodation',
+          price: 1599,
+          quantity: 1
         }]}
-        pagination={false}
+          pagination={false}
         >
           <Table.Column title="Items" dataIndex='name' />
           <Table.Column title="Description" dataIndex='description' />
@@ -70,27 +77,46 @@ const Invoice = ({removeCartItem, getCartItem, getItem, totalCartFunc, totalItem
           <Table.Column title="Price" dataIndex='price' />
           <Table.Column title="Line Total" />
         </Table>
-      </Row>
+      </Row> */}
 
       <Row style={{ marginTop: 48 }}>
         <Col span={8} offset={16}>
-          <table>
-            <tr>
-              <th>Gross Total :</th>
-              <td>Rs. 1599</td>
-            </tr>
-            <tr>
-              <th>IGST @6% :</th>
-              <td>Rs. 95.94</td>
-            </tr>
-            <tr>
-              <th>CGST @6% :</th>
-              <td>Rs. 95.94</td>
-            </tr>
-            <tr>
-              <th>Nett Total :</th>
-              <td>Rs. 1790.88</td>
-            </tr>
+          <table class="table table-shopping" style={{paddingLeft: '260px'}}>
+            <thead>
+              <tr>
+                <th class="text-center"></th>
+                <th>Product</th>
+                <th class="text-right">Description</th>
+                <th class="text-right">Qty</th>
+                <th class="text-right">Amount</th>
+                <th class="text-right">Total</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              { console.log(getItem,"items")}
+              {getItem.map((value, key) => (
+                <tr>
+                  <td class="td-name">{value.name}</td>
+                  <td class="td-number text-right">{value.description}</td>
+                  <td class="td-number">{value.quantity}</td>
+                  <td class="td-number">{value.price}</td>
+                  <td class="td-number">RS. {value.quantity * value.price}</td>
+                  <td class="td-number">
+                  </td>
+                </tr>
+              ))}
+
+              <tr>
+                <td colspan="3"></td>
+                <td class="td-total">
+                  Total Price
+                </td>
+                <td colspan="1" class="td-price">
+                  <td class="td-number">RS. {getItem.reduce((total, item) => total + (item.price * item.quantity), 0)}</td>
+                </td>
+              </tr>
+            </tbody>
           </table>
         </Col>
       </Row>
