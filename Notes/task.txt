@@ -1,0 +1,250 @@
+Signup:
+
+import React, { useContext, useState } from "react";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import GlobalContext from "./Context";
+import { Link } from "react-router-dom";
+const Signup = () => {
+  const [fname, setFname] = useState("");
+
+  const handleSubmit = () => {
+    localStorage.setItem("Name", fname);
+  };
+
+  const formik = useFormik({
+    initialValues: {
+      Fname: "",
+      Lname: "",
+      emailid: "",
+      password: "",
+      number: "",
+    },
+
+    validationSchema: yup.object().shape({
+      Fname: yup.string().required("This is Required"),
+      Lname: yup.string().required("This is Required"),
+      emailid: yup.string().email().required("This is Required"),
+      password: yup.string().required().min(6),
+    }),
+  });
+
+  const { userDetails } = useContext(GlobalContext);
+  console.log(userDetails.get, "this is user dedails");
+  return (
+    <div>
+      <form onSubmit={formik.handleSubmit}>
+        <label>
+          Enter your Fname:
+          <input
+            type="string"
+            value={formik.values.Fname}
+            onChange={formik.handleChange}
+            name="Fname"
+          />
+          {formik?.errors?.Fname}
+        </label>
+        <br></br>
+        <label>
+          Enter your Lname:
+          <input
+            type="string"
+            value={formik.values.Lname}
+            onChange={formik.handleChange}
+            name="Lname"
+          />
+          {formik?.errors?.Lname}
+        </label>
+        <br></br>
+        <label>
+          Enter your emailid:
+          <input
+            type="emailid"
+            value={formik.values.emailid}
+            onChange={formik.handleChange}
+            name="emailid"
+          />
+          {formik?.errors?.emailid}
+        </label>
+        <br></br>
+        <label>
+          Enter your Password:
+          <input
+            type="password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            name="password"
+          />
+          {formik?.errors?.password}
+        </label>
+        <br></br>
+        <label>
+          Enter your Mobile Number:
+          <input
+            type="number"
+            value={formik.values.number}
+            onChange={formik.handleChange}
+            name="number"
+          />
+          {formik?.errors?.number}
+        </label>
+        <br></br>
+
+        <button type="submit" onClick={handleSubmit}>
+          Submit
+        </button>
+        <Link to="/">
+          <button>Back</button>
+        </Link>
+      </form>
+    </div>
+  );
+};
+
+export default Signup;
+
+
+Login:
+
+import React, { useContext } from "react";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import GlobalContext from "./Context";
+import { Link } from "react-router-dom";
+const Login = () => {
+  const formik = useFormik({
+    initialValues: {
+      emailid: "",
+      password: "",
+    },
+
+    validationSchema: yup.object().shape({
+      emailid: yup.string().email().required("This is Required"),
+      password: yup.string().required().min(6),
+    }),
+  });
+
+  const { userDetails } = useContext(GlobalContext);
+  console.log(userDetails.get, "this is user dedails");
+  return (
+    <div>
+      <form onSubmit={formik.handleSubmit}>
+        <label>
+          Enter your emailid:
+          <input type="emailid" 
+          value={formik.values.emailid}
+          onChange={formik.handleChange}
+           name="emailid" />
+          {formik?.errors?.emailid}
+        </label>
+        <br></br>
+        <label>
+          Enter your Password:
+          <input
+            type="password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            name="password"
+          />
+          {formik?.errors?.password}
+        </label>
+        <br></br>
+        <Link to="/Home">
+          <button type="submit">Login</button>
+        </Link>
+
+        <Link to="/Signup">
+          <button>Signup</button>
+        </Link>
+        {localStorage.getItem('emailid') && (
+            <div>
+               emailid: <p>{localStorage.getItem('emailid')}</p>
+            </div>
+         )} 
+         {localStorage.getItem('password') && (
+          <div>
+             password: <p>{localStorage.getItem('password')}</p>
+          </div>
+       )}
+      </form>
+    </div>
+  );
+};
+
+export default Login;
+
+
+app.js
+
+import React, { createContext, useState } from "react";
+import Routers from "./Routers";
+import GlobalContext from "./Context";
+
+function App() {
+  const [dtls, setDtls] = useState({ id: 1 });
+  const store = {
+    userDetails: { get: dtls, set: setDtls },
+  };
+  return (
+    <div>
+      <GlobalContext.Provider value={store}>
+        <Routers />
+      </GlobalContext.Provider>
+    </div>
+  );
+}
+
+export default App;
+
+
+Routers.js
+import React from "react";
+
+import Signup from "./Signup";
+import Login from "./Login";
+import NavBar from "./NavBar";
+import Home from "./Home";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+function Routers() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/Home" element={<Home />} />
+        <Route path="/Signup" element={<Signup />} />
+      </Routes>
+    </Router>
+  );
+}
+
+export default Routers;
+
+
+
+Navbar.js
+import React from "react";
+import { Link } from "react-router-dom";
+
+function NavBar() {
+  return (
+    <div>
+      <>
+        <Link to="/Login">
+          <button>Login</button>
+        </Link>
+      </>
+    </div>
+  );
+}
+
+export default NavBar;
+
+Home.js
+
+index.js
+import React, { createContext, useState } from "react";
+
+const GlobalContext = createContext();
+
+export default GlobalContext;

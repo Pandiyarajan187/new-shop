@@ -1,0 +1,523 @@
+SignIn.js
+
+
+import React, { useEffect } from 'react'
+import useForm from '../../utils/Hooks/useForm'
+import {validateSignIn} from '../../utils/Validator'
+import axios from 'axios'
+import { Toast } from '../../utils/Notification'
+import { isAuthenticated } from '../../utils/Auth';
+import { Link } from 'react-router-dom';
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
+
+const SignIn = ({ history }) => {
+
+        const validationArray = Yup.object().shape({
+        email: Yup.string().email('Invalid Email').required('Email is Required'),
+        password: Yup.string().min(5).required('Password is Required')
+    })
+    
+    const formik = useFormik({
+    initialValues : {
+        email: '',
+        password : ''
+    },
+    validationSchema : validationArray,
+    onSubmit : async (values) => {
+        request(values)
+    }
+})
+     
+
+    useEffect(() => {
+        if(isAuthenticated()) return history.push('/')
+    }, [history])
+    //const { handleChange, handleSubmit, values, errors, state } = useForm( submit, validateSignIn )
+
+    //const [data, setData] = useState(values)
+
+    const request = async (values) => {
+        try {
+            const res = await axios.post('/signin', values)
+            console.log(res);
+            if (res) {
+                localStorage.setItem('token', JSON.stringify(res.data))
+                Toast.fire({ icon: 'success',title: `Welcome back, ${res.data.user.name}`, position: 'top-end' })
+                if (res.data.user.role) {
+                    return history.push('/admin/dashboard')
+                }
+                return history.push('/')
+            }
+        } catch (error) {
+            Toast.fire({ icon: 'error',title: 'Invalid Email or Password!' })
+            console.log(error);
+        }
+    }
+
+    // function submit() {
+    //     request(values)
+    // }
+
+    const SignInForm = (
+        <div class="login-page sidebar-collapse">
+            <div class="page-header header-filter" style={{backgroundImage: "url('../assets/img/bg7.jpg')", backgroundSize: 'cover', backgroundPosition: 'top center'}}>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 col-sm-8 ml-auto mr-auto">
+                            <form class="form" onSubmit={formik.handleSubmit}>
+                                <div class="card card-login card-hidden">
+                                    <div class="card-header card-header-danger text-center">
+                                        <h4 class="card-title">Login</h4>
+                                        <div class="social-line">
+                                            <Link to="#pablo" class="btn btn-just-icon btn-link btn-white">
+                                                <i class="fa fa-facebook-square"></i>
+                                            </Link>
+                                            <Link to="#pablo" class="btn btn-just-icon btn-link btn-white">
+                                                <i class="fa fa-twitter"></i>
+                                            </Link>
+                                            <Link to="#pablo" class="btn btn-just-icon btn-link btn-white">
+                                                <i class="fa fa-google-plus"></i>
+                                            </Link>
+                                        </div>
+                                    </div>
+                                    <div class="card-body ">
+                                        <p class="card-description text-center">Or Be Classical</p>
+                                          <span class="bmd-form-group">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        <i class="material-icons">email</i>
+                                                    </span>
+                                                </div>
+                                                 <input type="text" 
+                                                name="email" 
+                                                class="form-control" 
+                                                placeholder="Email..." 
+                                                onChange={formik.handleChange}
+                                                 value={formik.values.email}
+                                                />
+                                            </div>
+                                            {formik.touched.email && formik.errors.email ? (
+                                               <span style={{color :'red'}} >{formik.errors.email}</span>) : null}
+                                        </span>
+                                        <span class="bmd-form-group">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        <i class="material-icons">lock_outline</i>
+                                                    </span>
+                                                </div>
+                                                <input type="password" class="form-control" 
+                                                 placeholder="Password..." 
+                                                 onChange={formik.handleChange}
+                                                 value={formik.values.password}
+                                                 name="password"/>
+                                            </div>
+                                            {formik.touched.password && formik.errors.password ? (
+                                               <span style={{color :'red'}} >{formik.errors.password}</span>) : null}
+                                        </span>
+                                    </div>
+                                <div class="card-footer justify-content-center">
+                                    <button type="submit" class="btn btn-rose btn-link btn-lg">Lets Go</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        // <MDBRow>
+        //     <MDBCol md="6" className="d-block mx-auto">
+        //         <MDBCard style={{ borderTop: '5px solid #0099CC' }}>
+        //             <MDBCardBody>
+        //                 <form className='needs-validation' onSubmit={handleSubmit} noValidate>
+        //                     <p className="h4 text-center py-4">Sign In</p>
+        //                     <div className="grey-text">
+        //                     <MDBInput
+        //                         className="mb-3"
+        //                         outline
+        //                         name="email"
+        //                         label="Your email"
+        //                         icon="envelope"
+        //                         group
+        //                         type="email"
+        //                         validate
+        //                         error="wrong"
+        //                         required
+        //                         value={values.email}
+        //                         onChange={handleChange}
+        //                     >
+        //                         {
+        //                             state ? (errors.email && <small className='text-danger ml-3 pl-3'> {errors.email} </small>) : null
+        //                         }
+                                
+        //                     </MDBInput>
+        //                     <MDBInput
+        //                         className="mb-3"
+        //                         outline
+        //                         name="password"
+        //                         label="Your password"
+        //                         icon="lock"
+        //                         group
+        //                         type="password"
+        //                         validate
+        //                         required
+        //                         error="wrong"
+        //                         value={values.password}
+        //                         onChange={handleChange}
+        //                     >
+        //                         {
+        //                             state ? (errors.password && <small className='text-danger ml-3 pl-3'> {errors.password} </small>) : null
+        //                         }
+        //                     </MDBInput>
+        //                     </div>
+        //                     <div className="text-center py-4 mt-3">
+        //                         <MDBBtn color="cyan" type="submit">
+        //                             Login
+        //                         </MDBBtn>
+        //                     </div>
+        //                 </form>
+        //             </MDBCardBody>
+        //         </MDBCard>
+        //     </MDBCol>
+        // </MDBRow>
+    )
+
+    return (
+        <div>
+            { SignInForm }
+        </div>
+    )
+}
+
+export default SignIn
+
+
+
+==========================================================================
+SignUp.js
+
+
+import React from 'react'
+import useForm from '../../utils/Hooks/useForm'
+import {validateSignUp} from '../../utils/Validator'
+import axios from 'axios'
+import { Toast } from '../../utils/Notification'
+import { Link } from 'react-router-dom';
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
+
+const SignUp = ({ history }) => {
+
+    const validationArray = Yup.object().shape({
+        name : Yup.string().max(15).required('Name is Required'),
+        email: Yup.string().email('Invalid Email').required('Email is Required'),
+        password: Yup.string().min(6).required('Password is Required'),
+        confirm_password: Yup.string().oneOf([Yup.ref('password'), null],'Passwords must match').required('This is required'),
+        terms: Yup.bool().required('Accept Terms is required').oneOf([true],)
+    })
+    
+    const formik = useFormik({
+    initialValues : {
+        name: '',
+        email: '',
+        password : '',
+        confirm_password : '',
+        terms : false
+    },
+    validationSchema : validationArray,
+    onSubmit : async (values) => {
+        request(values)
+    }
+})
+     
+
+   // const { handleChange, handleSubmit, setValues, values, errors, state } = useForm( submit, validateSignUp )
+
+
+    const request = async (values) => {
+        try {
+            const res = await axios.post('/signup', values)
+            console.log(res);
+            if (res) {
+                Toast.fire({ icon: 'success',title: 'Register successfully' })
+                return history.push('/signin')
+            }
+        } catch (error) {
+            Toast.fire({ icon: 'warning',title: 'Email already exist!' })
+            console.log(error);
+        }
+    }
+
+    // function submit() {
+    //     request()
+    // }
+
+    const SignUpForm = (
+        <div class="signup-page">
+        <div class="page-header header-filter"  style={{backgroundImage: "url('../assets/img/bg7.jpg')", backgroundSize: 'cover', backgroundPosition: "top center"}}>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 ml-auto mr-auto">
+                    <div class="card card-signup">
+                        <h2 class="card-title text-center">Register</h2>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-5 ml-auto">
+                                    <div class="info info-horizontal">
+                                        <div class="icon icon-rose">
+                                            <i class="material-icons">timeline</i>
+                                        </div>
+                                        <div class="description">
+                                            <h4 class="info-title">Lowest Price</h4>
+                                            <p class="description">
+                                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="info info-horizontal">
+                                        <div class="icon icon-primary">
+                                            <i class="material-icons">code</i>
+                                        </div>
+                                        <div class="description">
+                                            <h4 class="info-title">Quality</h4>
+                                            <p class="description">
+                                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="info info-horizontal">
+                                        <div class="icon icon-info">
+                                            <i class="material-icons">group</i>
+                                        </div>
+                                        <div class="description">
+                                            <h4 class="info-title">Customer Satisfaction</h4>
+                                            <p class="description">
+                                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-5 mr-auto">
+                                    <div class="social text-center">
+                                        <button class="btn btn-just-icon btn-round btn-twitter">
+                                            <i class="fa fa-twitter"></i>
+                                            </button>
+                                        <button class="btn btn-just-icon btn-round btn-google">
+                                            <i class="fa fa-google"></i>
+                                        </button>
+                                        <button class="btn btn-just-icon btn-round btn-facebook">
+                                            <i class="fa fa-facebook"> </i>
+                                        </button>
+                                        <h4> or be classical </h4>
+                                    </div>
+                                    <form class="form" onSubmit={formik.handleSubmit}>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        <i class="material-icons">face</i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" 
+                                                name="name" 
+                                                class="form-control" 
+                                                placeholder="Name" 
+                                                onChange={formik.handleChange}
+                                                 value={formik.values.name}
+                                                />
+                                            </div>
+                                            {formik.touched.name && formik.errors.name ? (
+                                               <span style={{color :'red'}} >{formik.errors.name}</span>) : null}
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        <i class="material-icons">mail</i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" 
+                                                name="email" 
+                                                class="form-control" 
+                                                placeholder="Email..." 
+                                                onChange={formik.handleChange}
+                                                 value={formik.values.email}
+                                                />
+                                            </div>
+                                            {formik.touched.email && formik.errors.email ? (
+                                               <span style={{color :'red'}} >{formik.errors.email}</span>) : null}
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        <i class="material-icons">lock_outline</i>
+                                                    </span>
+                                                </div>
+                                                <input type="password" class="form-control" 
+                                                 placeholder="Password" 
+                                                 onChange={formik.handleChange}
+                                                 value={formik.values.password}
+                                                 name="password"/>
+                                            </div>
+                                            {formik.touched.password && formik.errors.password ? (
+                                               <span style={{color :'red'}} >{formik.errors.password}</span>) : null}
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">
+                                                        <i class="material-icons">lock_outline</i>
+                                                    </span>
+                                                </div>
+                                                <input type="password" class="form-control" 
+                                                 placeholder="Confirm Password" 
+                                                 onChange={formik.handleChange}
+                                                 value={formik.values.confirm_password}
+                                                 name="confirm_password"/>
+                                            </div>
+                                            {formik.touched.confirm_password && formik.errors.confirm_password ? (
+                                               <span style={{color :'red'}} >{formik.errors.confirm_password}</span>) : null}
+                                        </div>
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                        {/* <input class="form-check-input" 
+                                                        type="checkbox" 
+                                                        checked={values.terms} 
+                                                        value={values.terms} 
+                                                        onChange={() => setValues({ ...values, terms: !values.terms })} 
+                                                        name="terms"/> */}
+                                                          <input 
+                                                        // className='check'
+                                                           type="checkbox" 
+                                                            onChange={formik.handleChange}
+                                                            checked={formik.values.terms}
+                                                            value={formik.values.terms}
+                                                            name="terms"/>
+                                                <span class="form-check-sign">
+                                                {/* <span class="check"></span> */}
+                                                </span>
+                                                I agree to the <Link href="#something">terms and conditions</Link>.
+                                            </label><br></br>
+                                            {formik.touched.terms && formik.errors.terms ? (
+                                               <span style={{color :'red'}} >{formik.errors.terms}</span>) : null}
+                                        </div>
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-danger btn-round">Get Started</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+        // <MDBRow>
+        //     <MDBCol md="6" className="d-block mx-auto">
+        //         <MDBCard style={{ borderTop: '5px solid #0099CC' }}>
+        //             <MDBCardBody>
+        //             <form className='needs-validation' onSubmit={handleSubmit} noValidate>
+        //                 <p className="h4 text-center py-4">Sign up</p>
+        //                 <div className="grey-text">
+        //                 <MDBInput
+        //                     className="mb-3"
+        //                     outline
+        //                     name="name"
+        //                     label="Your name"
+        //                     icon="user"
+        //                     group
+        //                     type="text"
+        //                     error="wrong"
+        //                     required
+        //                     value={values.name}
+        //                     onChange={handleChange}
+        //                 >
+        //                     {
+        //                         state ? errors.name && <small className='text-danger ml-3 pl-3'> {errors.name} </small> : null
+        //                     }
+        //                 </MDBInput>
+        //                 <MDBInput
+        //                     className="mb-3"
+        //                     outline
+        //                     name="email"
+        //                     label="Your email"
+        //                     icon="envelope"
+        //                     group
+        //                     type="email"
+        //                     error="wrong"
+        //                     required
+        //                     value={values.email}
+        //                     onChange={handleChange}
+        //                 >
+        //                     {
+        //                         state ? errors.email && <small className='text-danger ml-3 pl-3'> {errors.email} </small> : null
+        //                     }
+        //                 </MDBInput>
+        //                 <MDBInput
+        //                     className="mb-3"
+        //                     outline
+        //                     name="password"
+        //                     label="Your password"
+        //                     icon="lock"
+        //                     group
+        //                     type="password"
+        //                     required
+        //                     error="wrong"
+        //                     value={values.password}
+        //                     onChange={handleChange}
+        //                 >
+        //                     {
+        //                         state ? errors.password && <small className='text-danger ml-3 pl-3'> {errors.password} </small> : null
+        //                     }
+        //                 </MDBInput>
+        //                 <MDBInput
+        //                     className="mb-3"
+        //                     outline
+        //                     name="confirm_password"
+        //                     label="Confirm your password"
+        //                     icon="exclamation-triangle"
+        //                     group
+        //                     type="password"
+        //                     error="wrong"
+        //                     required
+        //                     value={values.confirm_password}
+        //                     onChange={handleChange}
+        //                 >
+        //                     {
+        //                         state ? errors.confirm_password && <small className='text-danger ml-3 pl-3'> {errors.confirm_password} </small> : null
+        //                     }
+        //                 </MDBInput>
+        //                 </div>
+        //                 <div className="text-center py-4 mt-3">
+        //                     <MDBBtn color="cyan" type="submit">
+        //                         Register
+        //                     </MDBBtn>
+        //                 </div>
+        //             </form>
+        //             </MDBCardBody>
+        //         </MDBCard>
+        //     </MDBCol>
+        // </MDBRow>
+    )
+
+    return (
+        <div>
+            { SignUpForm }
+        </div>
+    )
+}
+
+export default SignUp
+
+
+
+
+
+
+==========================================================================

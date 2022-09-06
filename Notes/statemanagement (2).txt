@@ -1,0 +1,170 @@
+App.js
+
+import React from "react";
+import Todostate from "./Context/Todostate";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Myroutes from "./Todorouter";
+
+function App() {
+  return (
+    <Todostate>
+      <Router>
+        <Myroutes />
+      </Router>
+    </Todostate>
+  );
+}
+
+export default App;
+
+=============================================================================================
+
+Todoapp.js
+
+import React, { useContext } from "react";
+import { useState } from "react";
+import Todocontext from "./Context/Todocontext";
+import { Link } from "react-router-dom";
+
+function Todoapp() {
+  const todocontext = useContext(Todocontext);
+  const { data, handletodosubmit } = todocontext;
+
+  const [Data, setData] = useState();
+
+  const handleChange = (e) => {
+    setData(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handletodosubmit(Data);
+  };
+
+  return (
+    <div>
+      <label>
+        Add Your Todo:
+        <input type="text" onChange={handleChange} name="data" value={Data} />
+      </label>
+      <br></br>
+      <button type="submit" onClick={handleSubmit}>
+        Add todo
+      </button>
+      <Link to="/Nextpg">List todo</Link>
+    </div>
+  );
+}
+
+export default Todoapp;
+
+====================================================================================================
+
+Todorouter.js
+
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import Todoapp from "./Todoapp";
+import Nextpg from "./Nextpg";
+function Todorouter() {
+  return (
+    <Routes>
+      <Route path="/" element={<Todoapp />} />
+      <Route path="/Nextpg" element={<Nextpg />} />
+    </Routes>
+  );
+}
+
+export default Todorouter;
+
+==========================================================================================================
+
+nextpg.js
+
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
+import Todocontext from "./Context/Todocontext";
+
+function Nextpg() {
+  const todocontext = useContext(Todocontext);
+  const { data } = todocontext;
+  return (
+    <div>
+      <Link to="/">Back</Link>
+      <br></br>
+      {data ? data.map((element) => <p>{element}</p>) : "no data"}
+    </div>
+  );
+}
+
+export default Nextpg;
+
+=============================================================================================================
+
+Todocontext.js
+
+import { createContext } from "react";
+const Todocontext = createContext();
+export default Todocontext;
+
+=================================================================================================================
+
+Todoreducer.js
+
+import { SET_TODO } from "./Todotype";
+
+function Todoreducer(state, action) {
+  switch (action.type) {
+    case SET_TODO:
+      return {
+        ...state,
+        data: [...state.data, action.payload],
+      };
+    default:
+      return state;
+  }
+}
+export default Todoreducer;
+
+==================================================================================================================
+
+Todostate.js
+
+import React, { useReducer } from "react";
+import Todocontext from "./Todocontext";
+import Todoreducer from "./Todoreducer";
+import { SET_TODO } from "./Todotype";
+
+function Todostate(props) {
+  const initialState = { data: ["todo1", "todo2"] };
+
+  const [state, dispatch] = useReducer(Todoreducer, initialState);
+
+  const handletodosubmit = (data) => {
+    dispatch({
+      type: SET_TODO,
+      payload: data,
+    });
+  };
+
+  return (
+    <Todocontext.Provider
+      value={{
+        data: state.data,
+        handletodosubmit,
+      }}
+    >
+      {props.children}
+    </Todocontext.Provider>
+  );
+}
+
+export default Todostate;
+
+==========================================================================================================
+
+Todotype.js
+
+export const SET_TODO = "SET_TODO";
+
+===============================================================================================================

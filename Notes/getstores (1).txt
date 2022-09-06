@@ -1,0 +1,77 @@
+import React,{useEffect,useState} from 'react';
+import Product from "./Product"
+import axios from 'axios'
+
+
+function App() {
+   const [data,setData] = useState({})
+  const getAuctionSearch = async () =>{
+    try{
+    let res = await axios.post("https://auction_io.ecommerce.auction/api/getstores",
+    { storeID: 46 })
+    console.log(res,"Response")
+    if (res.data && res.data.response && Object.Keys(res.data.response).length !==0){
+      setData(res.data.response);
+    }
+  } catch (err) {
+     console.log(err,"error");
+  }
+};
+useEffect(()=>{
+    getAuctionSearch();
+},[])
+  return (
+    <div >
+       < Product data={data} />
+    </div>
+  );
+}
+
+export default App;
+
+
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+
+function Product(props) {
+  const [value, setValue] = useState({});
+  const productData = async () => {
+    try {
+      let res = await axios.post(
+        "https://forwardapidev.auctionsoftware.com/mobileapi/auctionsearch",
+        {
+          auc_type: 2,
+          auction_only: 1,
+          is_auction: 1,
+          lot_images: 1,
+          orderby: "2",
+          page: 1,
+          searchbar: "",
+          sh_limit: "10",
+          timed_live: "timed",
+          type: "",
+        },
+        {
+          header: {
+            site_id: props.data.results.set_id,
+            domain: "auction_preview.ecommerce.auction",
+          },
+        }
+      );
+      console.log(res.data.response, "response");
+    } catch (err) {
+      console.log(err, "error");
+    }
+  };
+  useEffect(() => {
+    console.log(props.data);
+    if (props.data && Object.keys(props.data).length !== 0) 
+    productData();
+  }, [props.data]);
+  return <div></div>;
+}
+
+export default Product;
+
+
+

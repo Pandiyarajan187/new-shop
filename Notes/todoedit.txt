@@ -1,0 +1,174 @@
+import React from 'react';
+import Router from "./Notesrouter";
+
+
+function App() {
+  return (
+    <div>
+      <Router />
+    </div>
+  )
+}
+
+export default App;
+
+
+
+
+
+
+
+
+
+import React from "react";
+import { useState } from "react";
+import axios from "axios";
+
+function Todoapp(){
+const [Value, setValue] = useState({
+    Todoapp:"",
+}); 
+
+
+const handleChange = (e) =>{
+   setValue(e.target.Value)
+   
+};
+
+const handleSubmit = (e) =>{
+   e.preventDefault();
+    axios.post('https://jsonplaceholder.typicode.com/posts', 
+      )
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    
+    
+
+axios.get('https://jsonplaceholder.typicode.com/posts')
+  .then((response)=>{
+console.log(response);
+  })
+  .catch((error)=> {
+    if (error.response) {
+      console.log(error.response.data);
+    }
+  });
+     console.log(Value);
+
+}
+ 
+return (
+    <div>
+    <form  >
+        <label>Add todo:<br></br>
+        <input 
+        id="text"
+        name="Addtodo"
+         onChange={handleChange}/>
+    </label><br></br>
+        <button  type="submit" onClick={handleSubmit}>Add todo</button>
+    </form>
+    </div>
+    );
+}
+export default Todoapp;
+
+
+
+
+import React from 'react'
+import Notes1 from './Notes1'
+import Notes2 from './Notes2'
+import Todonotes from './Todonotes'
+import {BrowserRouter as Router,Routes,Route } from "react-router-dom"
+
+function Notesrouter() {
+    return (
+        <Router>
+        <div>
+            <Todonotes  />
+            <Routes>
+            <Route path="/Notes1" element={<Notes1 />} />
+            <Route path="/Notes2" element={<Notes2 />} />
+            </Routes>
+        </div>
+        </Router>
+    )
+}
+
+export default Notesrouter;
+
+
+
+
+
+import React from 'react'
+import { Link } from 'react-router-dom';
+import Todoapp from "./Todoapp";
+function Todonotes() {
+    return (
+ <>
+            <Todoapp/> <br></br>
+          <Link to="/notes1">
+                <button>Notes 1</button>
+                
+         </Link><br></br><br></br>
+       
+         <Link to="/notes2">
+                <button>Notes 2</button>
+                
+         </Link>
+       
+    </>
+      
+    );
+}
+
+export default Todonotes;
+
+
+
+
+import React from 'react'
+
+function Notes1() {
+    return (
+        <div>
+               
+               <h1>Notes1</h1>
+              
+        </div>
+    )
+}
+
+export default Notes1;
+
+
+
+
+import React from 'react'
+
+function Notes2() {
+    return (
+        <div>
+            {<h1>Notes2</h1>}
+        </div>
+    )
+}
+
+export default Notes2;  
+
+
+
+
+
+
+
+
+
+
+

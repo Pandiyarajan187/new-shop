@@ -1,0 +1,25 @@
+1. https://github.com/Pandiyarajan187/new-shop
+
+REACT_APP_STRIPE_KEY="pk_test_51LaziwSHlNeSK1y2ESbOrqiUemnTfuVR8PwpI2Uct8HkxF2FToQks9i6nrej8H5NdRCR2aMhxvOBO2Sl6RinBcxb00BKG49Df3"
+
+=========
+
+2. Node basics: https://dev.to/cassiocappellari/basic-concepts-of-node-js-pch
+
+React Totorial: https://www.tutorialspoint.com/redux/redux_data_flow.htm
+Amazkart Github url : https://github.com/saanmu-sk/amazkart.git
+stripe : https://designcode.io/advanced-react-hooks-handbook-creating-stripe-account-product
+env file : PORT=8000
+DATABASE="mongodb+srv://pandi:pandipandi@cluster0.vfhfwpn.mongodb.net/?retryWrites=true&w=majority"
+JWT_SECRET="erjcxziudsxchj"
+BRAINTREE_MERCHANT_ID="nhddxc5y9hx74d3g"
+BRAINTREE_PRIVATE_KEY="5e55c0b800f639824487f99c69dc6cc4"
+BRAINTREE_PUBLIC_KEY="5nvm8w69b4495s8q"
+
+===================================================
+formik : https://www.bezkoder.com/react-hooks-form-validation-example-formik/===================================================cart tutorial : https://github.com/collegewap/react-context
+=============
+3. 
+
+
+

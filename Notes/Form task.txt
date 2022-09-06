@@ -1,0 +1,269 @@
+package.json
+
+{
+  "name": "myapp",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.16.2",
+    "@testing-library/react": "^12.1.3",
+    "@testing-library/user-event": "^13.5.0",
+    "axios": "^0.26.0",
+    "formik": "^2.2.9",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^6.2.2",
+    "react-scripts": "5.0.0",
+    "web-vitals": "^2.1.4",
+    "yup": "^0.32.11"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
+
+app.js
+import React, { createContext, useState } from "react";
+import Routers from "./Routers";
+import GlobalContext from "./Context";
+
+function App() {
+  const [dtls, setDtls] = useState({ id: 1 });
+  const store = {
+    userDetails: { get: dtls, set: setDtls },
+  };
+  return (
+    <div>
+      <GlobalContext.Provider value={store}> 
+        <Routers />
+      </GlobalContext.Provider> 
+    </div>
+  );
+}
+
+export default App;
+
+
+signup.js
+import React, { useContext, useState } from "react";
+
+import GlobalContext from "./Context";
+import { Link } from "react-router-dom";
+const Signup = () => {
+  const [registerData, setRegisterData] = useState({
+    Fname: "",
+    emailid: "",
+    password: "",
+  });
+  var sendObject= {
+    "Fname": registerData.Fname,
+    "emailid" : registerData.emailid,
+    "password" : registerData.password 
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(registerData);
+    localStorage.setItem("sendObject",JSON.stringify(sendObject));
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setRegisterData({ ...registerData, [name]: value });
+  };
+
+  const handle = () => {
+    localStorage.setItem("emailid", registerData.emailid);
+    localStorage.setItem("password", registerData.password);
+  };
+
+  // const { userDetails } = useContext(GlobalContext);
+  // console.log(userDetails.get, "this is user dedails");
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+      <label>
+          Enter your FirstName:
+          <input
+            type="string"
+            value={registerData.Fname}
+            onChange={handleChange}
+            name="Fname"
+          />
+        </label>
+        <label>
+          Enter your emailid:
+          <input
+            type="emailid"
+            value={registerData.emailid}
+            onChange={handleChange}
+            name="emailid"
+          />
+        </label>
+        <br></br>
+        <label>
+          Enter your password:
+          <input
+            type="password"
+            value={registerData.password}
+            onChange={handleChange}
+            name="password"
+          />
+        </label>
+
+        <button type="submit" onClick={handle}>
+          Submit
+        </button>
+        <Link to="/">
+          <button>Back</button>
+        </Link>
+      </form>
+    </div>
+  );
+};
+
+export default Signup;
+
+
+Login.js
+import React, { useContext, useState } from "react";
+import { Link } from "react-router-dom";
+
+const Login = () => {
+  const [login, setLogin] = useState({
+    emailid: "",
+    password: "",
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const receiveObject = JSON.parse(localStorage.getItem("sendObject"));
+    console.log(receiveObject, login);
+    if (
+      login.emailid === receiveObject.emailid &&
+      login.password === receiveObject.password
+    ) {
+      console.log("Login Success");
+    } else {
+      console.log("error");
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setLogin({ ...login, [name]: value });
+  };
+
+  // const { userDetails } = useContext(GlobalContext);
+  // console.log(userDetails.get, "this is user dedails");
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Enter your emailid:
+          <input
+            type="emailid"
+            value={login.emailid}
+            onChange={handleChange}
+            name="emailid"
+          />
+        </label>
+        <br></br>
+        <label>
+          Enter your password:
+          <input
+            type="password"
+            value={login.password}
+            onChange={handleChange}
+            name="password"
+          />
+        </label>
+
+        <button type="submit">Login</button>
+
+        <Link to="/Signup">
+          <button>Signup</button>
+        </Link>
+      </form>
+    </div>
+  );
+};
+
+export default Login;
+
+
+Router.js
+import React from "react";
+
+import Signup from "./Signup";
+import Login from "./Login";
+import NavBar from "./NavBar";
+import Home from "./Home";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+function Routers() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/Home" element={<Home />} />
+        <Route path="/Signup" element={<Signup />} />
+      </Routes>
+    </Router>
+  );
+}
+
+export default Routers;
+
+
+Navbar.js
+import React from "react";
+import { Link } from "react-router-dom";
+
+function NavBar() {
+  return (
+    <div>
+      <>
+        <Link to="/Login">
+          <button>Login</button>
+        </Link>
+      </>
+    </div>
+  );
+}
+
+export default NavBar;
+
+
+Home.js
+
+context
+
+import React, { createContext, useState } from "react";
+
+const GlobalContext = createContext();
+
+export default GlobalContext;
+
+

@@ -1,0 +1,49 @@
+var express = require("express");
+var app = express();
+var mysql = require("mysql");
+var bodyParser = require("body-parser");
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+const { createPool } = require("mysql");
+const pool = createPool({
+  host: "Localhost",
+  user: "root",
+  password: "",
+  database: "test",
+  connectionLimit: 10,
+});
+pool.query(`select * from registration `, (err, results, fields) => {
+  if (err) {
+    return console.log(err);
+  }
+});
+
+app.post(`/url`, (req, res) => {
+  try {
+    let username = req.body.username;
+  let emailid = req.body.emailid;
+pool.query("SELECT emailid FROM registration WHERE emailid = '"+ emailid +"'", function(err, result, field){
+  if(result.length === 0){
+     let sql = `INSERT into registration (username , emailid ) values (?, ?)`;
+  pool.query(sql, [username, emailid], (err, results) => {
+    if (err) throw err;
+    res.write("Inserted Successfully");
+    res.end();
+  })
+}else{  
+  console.log("Email already exist")
+  res.write("Not Inserted");
+  res.end();
+
+}
+});
+  } catch (error) {
+    console.log(error);
+    res.write("Not Inserted");
+  }
+});
+app.listen(3000,()=>{
+   console.log("Listening on Port 3000");
+});

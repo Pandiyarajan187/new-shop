@@ -79,13 +79,13 @@ const Invoice = ({ removeCartItem, totalItem }) => {
         </Table>
       </Row> */}
 
-      <Row style={{ marginTop: 48 }}>
+      <Row style={{ marginTop: 48 , paddingRight : '1160px'}} >
         <Col span={8} offset={16}>
-          <table class="table table-shopping" style={{paddingLeft: '260px'}}>
-            <thead>
+          <table class="table table-shopping select">
+            <thead class='select'>
               <tr>
                 <th class="text-center"></th>
-                <th>Product</th>
+                <th class="text-right">Product</th>
                 <th class="text-right">Description</th>
                 <th class="text-right">Qty</th>
                 <th class="text-right">Amount</th>
