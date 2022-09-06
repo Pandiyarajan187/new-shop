@@ -25,6 +25,7 @@ import UserProfile from './user/userProfile';
 import Checkout from './core/Checkout';
 import Success from './core/Success';
 import Cancel from './core/Cancel';
+import Invoice from './core/Invoice';
 
 function MyRoute() {
  const {user , allProducts } = useContext(authContext)
@@ -49,6 +50,7 @@ function MyRoute() {
                         <Route path='/checkout' element={<Checkout />} />
                         <Route path="/success" element={<Success />} />
                         <Route path="/cancel" element={<Cancel />} />
+                        <Route path="/invoice" element={<Invoice />} />
                     </Route>
 
                     <Route exact element={<AdminRoute />}>

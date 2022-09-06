@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 import Checkout from './Checkout'
 import Product from './Product'
 import authContext from '../context/authContext'
+import Invoice from './Invoice'
 
 
 const Cart = () => {
@@ -152,10 +153,16 @@ const Cart = () => {
                 </div> */}
                 </div>
             </div>
+            <Invoice   removeCartItem= {removeCartItem}
+             getCartItem= {getCartItem}
+             getItem= {getItem}
+             totalCartFunc= {totalCartFunc}
+             totalItem= {totalItem}
+             />
         </div>
+
 
     )
 }
 
 export default Cart
-//Quantity added
